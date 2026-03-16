@@ -520,8 +520,10 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
 .ft-clk{font-family:var(--font-m);font-size:10px;color:var(--g600)}
 
 /* ═══════════════════════════════════════════════════
-   MOBILE
+   MOBILE (HIDDEN BY DEFAULT)
 ═══════════════════════════════════════════════════ */
+.m-menu, .nav-mob-toggle { display: none; }
+
 @media(max-width:960px){
   #cDot,#cRing,#cLabel{display:none}body{cursor:auto}
   nav{padding:0 20px;height:60px}.nav-links,.n-live{display:none}.nbtn.g{display:none}.nbtn.s{padding:8px 16px;font-size:10px}
