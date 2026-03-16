@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Your Project — The Code Morph</title>
+<meta name="description" content="Tell us about your business. We'll engineer the exact digital ecosystem it needs to dominate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#000;--white:#fff;
+  --blue:#3b82f6;--blue-d:#1d4ed8;--blue-g:#60a5fa;
+  --cyan:#06b6d4;--purple:#a855f7;--green:#22c55e;--amber:#f59e0b;
+  --g950:#030303;--g900:#080808;--g800:#0e0e0e;--g700:#151515;
+  --g600:#1c1c1c;--g500:#242424;--g400:#555;--g300:#888;--g200:#aaa;
+  --border:rgba(255,255,255,.055);--border-b:rgba(59,130,246,.22);
+  --font-d:'Bebas Neue',sans-serif;
+  --font-b:'Plus Jakarta Sans',sans-serif;
+  --font-m:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+  --ease-b:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--black);color:var(--white);font-family:var(--font-b);min-height:100vh;cursor:none}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--blue);color:#000}
+input,textarea,select{font-family:var(--font-b)}
+
+/* CURSOR */
+#cDot{position:fixed;width:8px;height:8px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .15s}
+#cRing{position:fixed;width:40px;height:40px;border:1.5px solid rgba(255,255,255,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s var(--ease),height .35s var(--ease),border-color .3s}
+
+/* LAYOUT */
+.ct-wrap{display:grid;grid-template-columns:380px 1fr;min-height:100vh}
+
+/* LEFT PANEL */
+.ct-left{background:var(--g900);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:0;overflow:hidden}
+.ct-left-top{padding:32px 40px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ct-logo{display:flex;align-items:center;gap:12px;margin-bottom:0}
+.ct-logo-box{width:32px;height:32px;border:1.5px solid var(--blue);border-radius:5px;display:grid;place-items:center;font-family:var(--font-d);font-size:13px;color:var(--blue)}
+.ct-logo-name{font-family:var(--font-d);font-size:18px;letter-spacing:.15em}
+.ct-logo-name span{color:var(--blue)}
+
+.ct-steps-wrap{flex:1;padding:36px 40px;overflow-y:auto;display:flex;flex-direction:column;gap:0}
+.ct-step-item{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .3s;position:relative}
+.ct-step-item:last-child{border:none}
+.ct-step-item.inactive{opacity:.35}
+.ct-step-item.active{opacity:1}
+.ct-step-item.done{opacity:.7}
+.ct-step-num{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border-b);display:grid;place-items:center;font-family:var(--font-d);font-size:16px;color:var(--blue);flex-shrink:0;transition:all .35s}
+.ct-step-item.active .ct-step-num{background:var(--blue);color:#000;border-color:var(--blue)}
+.ct-step-item.done .ct-step-num{background:var(--green);border-color:var(--green);color:#000;font-size:12px}
+.ct-step-title{font-family:var(--font-d);font-size:16px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;line-height:1}
+.ct-step-sub{font-family:var(--font-m);font-size:10px;color:var(--g400);letter-spacing:.1em}
+.ct-step-item.active .ct-step-title{color:var(--white)}
+.ct-step-item.active .ct-step-sub{color:var(--g300)}
+
+.ct-left-bottom{padding:28px 40px;border-top:1px solid var(--border);flex-shrink:0}
+.ct-eta{display:flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:9px;letter-spacing:.15em;color:var(--g400);text-transform:uppercase;margin-bottom:14px}
+.ct-eta-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+.ct-what-next{font-size:12px;color:var(--g400);line-height:1.7}
+.ct-what-next strong{color:var(--white);display:block;font-family:var(--font-m);font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+
+/* RIGHT PANEL */
+.ct-right{display:flex;flex-direction:column;min-height:100vh}
+.ct-progress-bar{height:3px;background:var(--g800);position:relative;flex-shrink:0}
+.ct-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .6s var(--ease);width:20%}
+
+.ct-form-area{flex:1;padding:60px 72px;max-width:860px}
+.ct-step-header{margin-bottom:44px}
+.ct-step-kicker{font-family:var(--font-m);font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.ct-step-kicker::before{content:'';width:22px;height:1px;background:var(--blue)}
+.ct-step-h{font-family:var(--font-d);font-size:clamp(36px,4vw,58px);text-transform:uppercase;letter-spacing:.02em;line-height:1;margin-bottom:10px}
+.ct-step-desc{font-size:15px;color:var(--g300);line-height:1.8;max-width:520px}
+
+/* FORM ELEMENTS */
+.form-grid{display:grid;gap:16px}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-label{font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--g300)}
+.form-input,.form-select,.form-textarea{background:var(--g900);border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-size:15px;color:var(--white);outline:none;transition:border-color .25s,box-shadow .25s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--g500)}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-select option{background:var(--g800)}
+.form-textarea{min-height:120px;resize:vertical;line-height:1.7}
+
+/* RADIO CARDS */
+.radio-cards{display:grid;gap:10px}
+.radio-cards-2{grid-template-columns:1fr 1fr}
+.radio-cards-3{grid-template-columns:repeat(3,1fr)}
+.radio-card{border:1px solid var(--border);border-radius:10px;padding:16px 18px;cursor:pointer;transition:all .25s;position:relative;display:flex;align-items:flex-start;gap:12px}
+.radio-card:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.02)}
+.radio-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06)}
+.radio-card input[type=radio]{display:none}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;transition:all .25s;display:grid;place-items:center}
+.radio-card.selected .radio-dot{border-color:var(--blue);background:var(--blue)}
+.radio-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:#000;opacity:0;transition:opacity .2s}
+.radio-card.selected .radio-dot::after{opacity:1}
+.radio-card-body{flex:1}
+.radio-card-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
+.radio-card-sub{font-size:12px;color:var(--g400);line-height:1.5}
+
+/* SERVICE CHECK CARDS */
+.srv-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.srv-check-card{border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
+.srv-check-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;transform:scaleY(0);transition:transform .3s;transform-origin:bottom}
+.srv-check-card:hover{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.02)}
+.srv-check-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06)}
+.srv-check-card.selected::before{background:var(--blue);transform:scaleY(1)}
+.srv-check-card input[type=checkbox]{display:none}
+.srv-check-box{width:20px;height:20px;border:1.5px solid var(--border);border-radius:5px;flex-shrink:0;display:grid;place-items:center;transition:all .25s}
+.srv-check-card.selected .srv-check-box{background:var(--blue);border-color:var(--blue)}
+.srv-check-box svg{opacity:0;transition:opacity .2s}
+.srv-check-card.selected .srv-check-box svg{opacity:1}
+.srv-check-ico{font-size:18px;flex-shrink:0}
+.srv-check-label{font-size:13px;font-weight:600;color:var(--white)}
+.srv-check-sub{font-size:11px;color:var(--g400);margin-top:1px}
+
+/* NAV BUTTONS */
+.ct-nav{display:flex;align-items:center;justify-content:space-between;margin-top:44px;padding-top:32px;border-top:1px solid var(--border)}
+.ct-btn-back{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:12px 24px;border:1px solid var(--border);border-radius:6px;color:var(--g300);cursor:pointer;background:none;transition:all .25s}
+.ct-btn-back:hover{border-color:rgba(255,255,255,.2);color:var(--white)}
+.ct-btn-next{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-d);font-size:18px;letter-spacing:.1em;text-transform:uppercase;padding:14px 40px;background:var(--blue);color:#000;border:none;border-radius:6px;cursor:pointer;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+.ct-btn-next::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .5s}
+.ct-btn-next:hover::before{transform:translateX(100%)}
+.ct-btn-next:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(59,130,246,.45)}
+
+/* STEP PANELS */
+.step-panel{display:none;animation:stepIn .45s var(--ease) both}
+.step-panel.active{display:block}
+@keyframes stepIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* REVIEW PANEL */
+.review-section{margin-bottom:28px;padding:24px;background:var(--g900);border:1px solid var(--border);border-radius:12px}
+.review-section-title{font-family:var(--font-m);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--g400);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.review-section-title::before{content:'';width:14px;height:1px;background:var(--blue)}
+.review-item{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;gap:16px}
+.review-item:last-child{border:none;padding-bottom:0}
+.review-key{color:var(--g400);font-family:var(--font-m);font-size:11px;flex-shrink:0}
+.review-val{color:var(--white);text-align:right;line-height:1.5}
+.review-tag{display:inline-flex;padding:3px 10px;border:1px solid var(--border-b);border-radius:100px;font-size:11px;color:var(--blue);margin:2px;font-family:var(--font-m)}
+
+/* SUCCESS */
+.success-wrap{text-align:center;padding:60px 40px;max-width:600px;margin:0 auto}
+.success-icon{font-size:64px;margin-bottom:24px;display:block}
+.success-h{font-family:var(--font-d);font-size:clamp(40px,5vw,72px);text-transform:uppercase;letter-spacing:.02em;margin-bottom:16px}
+.success-h span{color:var(--blue)}
+.success-p{font-size:16px;color:var(--g300);line-height:1.85;margin-bottom:36px}
+.success-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:40px;text-align:left}
+.success-step{display:flex;gap:16px;align-items:flex-start;padding:16px 20px;background:var(--g900);border:1px solid var(--border);border-radius:10px}
+.success-step-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#000;display:grid;place-items:center;font-family:var(--font-d);font-size:14px;flex-shrink:0}
+.success-step-text{font-size:13px;color:var(--g200);line-height:1.65}
+.success-step-text strong{color:var(--white);display:block;margin-bottom:2px}
+.back-home{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--border-b);border-radius:6px;color:var(--blue);transition:background .25s}
+.back-home:hover{background:rgba(59,130,246,.08)}
+
+/* MOBILE */
+@media(max-width:900px){
+  .ct-wrap{grid-template-columns:1fr}
+  .ct-left{display:none}
+  .ct-form-area{padding:40px 24px}
+}
+</style>
+</head>
+<body>
+<div id="cDot"></div><div id="cRing"></div>
+
+<div class="ct-wrap">
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <aside class="ct-left">
+    <div class="ct-left-top">
+      <a href="index.html" class="ct-logo">
+        <div class="ct-logo-box">TCM</div>
+        <div class="ct-logo-name">THE CODE <span>MORPH</span></div>
+      </a>
+    </div>
+
+    <div class="ct-steps-wrap" id="stepList">
+      <div class="ct-step-item active" data-step="1">
+        <div class="ct-step-num">01</div>
+        <div>
+          <div class="ct-step-title">Identify</div>
+          <div class="ct-step-sub">Who are you?</div>
+        </div>
+      </div>
+      <div class="ct-step-item inactive" data-step="2">
+        <div class="ct-step-num">02</div>
+        <div>
+          <div class="ct-step-title">Context</div>
+          <div class="ct-step-sub">Your business</div>
+        </div>
+      </div>
+      <div class="ct-step-item inactive" data-step="3">
+        <div class="ct-step-num">03</div>
+        <div>
+          <div class="ct-step-title">Services</div>
+          <div class="ct-step-sub">What you need</div>
+        </div>
+      </div>
+      <div class="ct-step-item inactive" data-step="4">
+        <div class="ct-step-num">04</div>
+        <div>
+          <div class="ct-step-title">Scope</div>
+          <div class="ct-step-sub">Budget & timeline</div>
+        </div>
+      </div>
+      <div class="ct-step-item inactive" data-step="5">
+        <div class="ct-step-num">05</div>
+        <div>
+          <div class="ct-step-title">Confirm</div>
+          <div class="ct-step-sub">Review & submit</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct-left-bottom">
+      <div class="ct-eta"><div class="ct-eta-dot"></div>Takes ~4 minutes</div>
+      <div class="ct-what-next">
+        <strong>What happens next</strong>
+        We review your intake within 24hrs. You receive a free 90-min Strategy Call invite — where we dissect your goals, map your ICP, and deliver a custom project blueprint. No fluff. Just a plan.
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <main class="ct-right">
+    <div class="ct-progress-bar"><div class="ct-progress-fill" id="progressFill"></div></div>
+
+    <div class="ct-form-area">
+
+      <!-- STEP 1: IDENTIFY -->
+      <div class="step-panel active" id="step1">
+        <div class="ct-step-header">
+          <div class="ct-step-kicker">Step 01 of 05</div>
+          <div class="ct-step-h">Let's start<br>with you.</div>
+          <p class="ct-step-desc">We build relationships, not transactions. Tell us who you are so we can speak your language from day one.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label class="form-label">First Name *</label>
+              <input class="form-input" type="text" id="firstName" placeholder="Arjun" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name *</label>
+              <input class="form-input" type="text" id="lastName" placeholder="Sharma">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Email *</label>
+            <input class="form-input" type="email" id="email" placeholder="arjun@yourbrand.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input class="form-input" type="tel" id="phone" placeholder="+91 98765 43210" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company / Brand Name *</label>
+            <input class="form-input" type="text" id="company" placeholder="Your company name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Existing Website (if any)</label>
+            <input class="form-input" type="url" id="website" placeholder="https://yourbrand.com">
+          </div>
+        </div>
+        <div class="ct-nav">
+          <div></div>
+          <button class="ct-btn-next" onclick="goStep(2)">Next — Context →</button>
+        </div>
+      </div><!-- /step1 -->
+
+      <!-- STEP 2: CONTEXT -->
+      <div class="step-panel" id="step2">
+        <div class="ct-step-header">
+          <div class="ct-step-kicker">Step 02 of 05</div>
+          <div class="ct-step-h">Your business<br>context.</div>
+          <p class="ct-step-desc">Strategy without context is noise. Help us understand where you are so we can map exactly where you need to go.</p>
+        </div>
+        <div class="form-grid" style="gap:24px">
+          <div class="form-group">
+            <label class="form-label">Industry / Vertical *</label>
+            <select class="form-select" id="industry">
+              <option value="">Select your industry</option>
+              <option value="Healthcare">Healthcare & MedTech</option>
+              <option value="SaaS & Tech">SaaS & Technology</option>
+              <option value="FinTech">FinTech & Finance</option>
+              <option value="Real Estate">Real Estate & Property</option>
+              <option value="E-commerce">E-commerce & Retail</option>
+              <option value="LegalTech">Legal & LegalTech</option>
+              <option value="EdTech">Education & EdTech</option>
+              <option value="F&B & Retail">Food & Beverage / Hospitality</option>
+              <option value="Manufacturing">Manufacturing & B2B</option>
+              <option value="Professional Services">Professional Services</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Stage *</label>
+            <div class="radio-cards radio-cards-2" id="stageCards">
+              <label class="radio-card" onclick="selectRadio(this,'stage','idea')">
+                <input type="radio" name="stage" value="idea"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">💡 Idea Stage</div><div class="radio-card-sub">Pre-revenue, validating concept</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'stage','startup')">
+                <input type="radio" name="stage" value="startup"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">🚀 Startup</div><div class="radio-card-sub">Early revenue, building momentum</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'stage','growing')">
+                <input type="radio" name="stage" value="growing"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">📈 Growing</div><div class="radio-card-sub">Scaling, need better systems</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'stage','established')">
+                <input type="radio" name="stage" value="established"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">🏢 Established</div><div class="radio-card-sub">Profitable, optimising for dominance</div></div>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monthly Revenue Range</label>
+            <div class="radio-cards radio-cards-3" id="revenueCards">
+              <label class="radio-card" onclick="selectRadio(this,'revenue','pre')">
+                <input type="radio" name="revenue" value="pre"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">Pre-revenue</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'revenue','0-1L')">
+                <input type="radio" name="revenue" value="0-1L"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹0 – 1L /mo</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'revenue','1-5L')">
+                <input type="radio" name="revenue" value="1-5L"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹1L – 5L /mo</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'revenue','5-20L')">
+                <input type="radio" name="revenue" value="5-20L"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹5L – 20L /mo</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'revenue','20L+')">
+                <input type="radio" name="revenue" value="20L+"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹20L+ /mo</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'revenue','prefer-not')">
+                <input type="radio" name="revenue" value="prefer-not"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">Prefer not to say</div></div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="ct-nav">
+          <button class="ct-btn-back" onclick="goStep(1)">← Back</button>
+          <button class="ct-btn-next" onclick="goStep(3)">Next — Services →</button>
+        </div>
+      </div><!-- /step2 -->
+
+      <!-- STEP 3: SERVICES -->
+      <div class="step-panel" id="step3">
+        <div class="ct-step-header">
+          <div class="ct-step-kicker">Step 03 of 05</div>
+          <div class="ct-step-h">What do you<br>actually need?</div>
+          <p class="ct-step-desc">Select every service that applies. Most clients realise they need more than they thought — because each service compounds the others.</p>
+        </div>
+        <div class="srv-check-grid" id="serviceCards">
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Web & App Development"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">🌐</div>
+            <div><div class="srv-check-label">Web & App Dev</div><div class="srv-check-sub">Websites, SaaS, ecommerce</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="SEO"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">🔍</div>
+            <div><div class="srv-check-label">Search Engine SEO</div><div class="srv-check-sub">Rank higher, get found faster</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Paid Ads"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">📣</div>
+            <div><div class="srv-check-label">Paid Advertising</div><div class="srv-check-sub">Google, Meta, LinkedIn ads</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Local SEO"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">📍</div>
+            <div><div class="srv-check-label">Local SEO & Maps</div><div class="srv-check-sub">Google 3-Pack domination</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Website Maintenance"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">⚙️</div>
+            <div><div class="srv-check-label">Website Maintenance</div><div class="srv-check-sub">Uptime, speed, zero issues</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="AI Automation"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">🤖</div>
+            <div><div class="srv-check-label">AI & Automation</div><div class="srv-check-sub">Chatbots, CRM, workflows</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Branding"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">✨</div>
+            <div><div class="srv-check-label">Branding & Design</div><div class="srv-check-sub">Logo, identity, creatives</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Analytics"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">📊</div>
+            <div><div class="srv-check-label">Analytics & Reporting</div><div class="srv-check-sub">Data-driven decisions</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Security"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">🛡️</div>
+            <div><div class="srv-check-label">Website Security</div><div class="srv-check-sub">WAF, SSL, DDoS protection</div></div>
+          </label>
+          <label class="srv-check-card" onclick="toggleService(event,this)">
+            <input type="checkbox" name="services" value="Digital Transformation Consulting"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="srv-check-ico">🚀</div>
+            <div><div class="srv-check-label">DX Consulting</div><div class="srv-check-sub">Full digital transformation</div></div>
+          </label>
+        </div>
+        <div class="ct-nav">
+          <button class="ct-btn-back" onclick="goStep(2)">← Back</button>
+          <button class="ct-btn-next" onclick="goStep(4)">Next — Scope →</button>
+        </div>
+      </div><!-- /step3 -->
+
+      <!-- STEP 4: SCOPE -->
+      <div class="step-panel" id="step4">
+        <div class="ct-step-header">
+          <div class="ct-step-kicker">Step 04 of 05</div>
+          <div class="ct-step-h">Define the<br>scope.</div>
+          <p class="ct-step-desc">Investment and timing shape what's possible. Be honest — we'll always design the highest-ROI path within your constraints.</p>
+        </div>
+        <div class="form-grid" style="gap:24px">
+          <div class="form-group">
+            <label class="form-label">Investment Budget *</label>
+            <div class="radio-cards radio-cards-2" id="budgetCards">
+              <label class="radio-card" onclick="selectRadio(this,'budget','20-50k')">
+                <input type="radio" name="budget" value="20-50k"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹20K – 50K</div><div class="radio-card-sub">Starter — launch presence</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'budget','50k-1L')">
+                <input type="radio" name="budget" value="50k-1L"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹50K – 1L</div><div class="radio-card-sub">Growth — full platform</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'budget','1-5L')">
+                <input type="radio" name="budget" value="1-5L"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹1L – 5L</div><div class="radio-card-sub">Scale — serious infrastructure</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'budget','5L+')">
+                <input type="radio" name="budget" value="5L+"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">₹5L +</div><div class="radio-card-sub">Enterprise — total domination</div></div>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Timeline *</label>
+            <div class="radio-cards radio-cards-2" id="timelineCards">
+              <label class="radio-card" onclick="selectRadio(this,'timeline','asap')">
+                <input type="radio" name="timeline" value="asap"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">🔥 ASAP</div><div class="radio-card-sub">We start yesterday</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'timeline','1-3mo')">
+                <input type="radio" name="timeline" value="1-3mo"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">1 – 3 Months</div><div class="radio-card-sub">Focused sprint</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'timeline','3-6mo')">
+                <input type="radio" name="timeline" value="3-6mo"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">3 – 6 Months</div><div class="radio-card-sub">Steady build</div></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio(this,'timeline','flexible')">
+                <input type="radio" name="timeline" value="flexible"><div class="radio-dot"></div>
+                <div class="radio-card-body"><div class="radio-card-title">Flexible</div><div class="radio-card-sub">Let's plan it together</div></div>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Describe Your Project or Requirements</label>
+            <textarea class="form-textarea" id="description" placeholder="Tell us what you're building, what problem you're solving, and what success looks like for you. The more context, the sharper our blueprint."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">How did you hear about us?</label>
+            <select class="form-select" id="source">
+              <option value="">Select one</option>
+              <option value="Google Search">Google Search</option>
+              <option value="Social Media">Social Media (Instagram / LinkedIn)</option>
+              <option value="Referral">Referral from someone</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="ct-nav">
+          <button class="ct-btn-back" onclick="goStep(3)">← Back</button>
+          <button class="ct-btn-next" onclick="goStep(5)">Review & Confirm →</button>
+        </div>
+      </div><!-- /step4 -->
+
+      <!-- STEP 5: REVIEW -->
+      <div class="step-panel" id="step5">
+        <div class="ct-step-header">
+          <div class="ct-step-kicker">Step 05 of 05</div>
+          <div class="ct-step-h">Review &<br>confirm.</div>
+          <p class="ct-step-desc">Here's everything you've told us. Review it, add any final notes, and submit — we'll take it from here.</p>
+        </div>
+        <div id="reviewContent"></div>
+        <div class="form-group" style="margin-top:20px">
+          <label class="form-label">Anything else we should know?</label>
+          <textarea class="form-textarea" id="finalNotes" placeholder="Any special requirements, concerns, or questions for our strategy call..."></textarea>
+        </div>
+        <div class="ct-nav">
+          <button class="ct-btn-back" onclick="goStep(4)">← Back</button>
+          <button class="ct-btn-next" onclick="submitForm()" style="background:var(--green);box-shadow:none">Submit &amp; Book Call ✓</button>
+        </div>
+      </div><!-- /step5 -->
+
+      <!-- SUCCESS -->
+      <div class="step-panel" id="stepSuccess">
+        <div class="success-wrap">
+          <span class="success-icon">🚀</span>
+          <div class="success-h">You're <span>morphed</span><br>in.</div>
+          <p class="success-p">Your intake has been received. Our senior strategist is already reviewing your brief. Expect a personalised response within <strong>24 hours</strong>.</p>
+          <div class="success-steps">
+            <div class="success-step">
+              <div class="success-step-num">1</div>
+              <div class="success-step-text"><strong>Within 24 hours</strong>We review your brief and prepare a tailored pre-call analysis of your competitive landscape.</div>
+            </div>
+            <div class="success-step">
+              <div class="success-step-num">2</div>
+              <div class="success-step-text"><strong>Strategy Call Invite</strong>You receive a calendar link for your free 90-minute deep-dive session with our senior digital strategist.</div>
+            </div>
+            <div class="success-step">
+              <div class="success-step-num">3</div>
+              <div class="success-step-text"><strong>Custom Blueprint Delivered</strong>Post-call, you get a detailed project blueprint — scope, timeline, milestones, and investment — before a single rupee is committed.</div>
+            </div>
+          </div>
+          <a href="index.html" class="back-home">← Back to The Code Morph</a>
+        </div>
+      </div>
+
+    </div><!-- /ct-form-area -->
+  </main>
+</div>
+
+<script>
+/* ═══ CURSOR ═══ */
+const dot=document.getElementById('cDot'),ring=document.getElementById('cRing');
+let rx=0,ry=0,mx=0,my=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function lag(){requestAnimationFrame(lag);rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';})();
+
+/* ═══ STEP MACHINE ═══ */
+let currentStep=1;
+const TOTAL_STEPS=5;
+
+function goStep(n){
+  if(n<1||n>TOTAL_STEPS+1)return;
+  document.getElementById('step'+currentStep)?.classList.remove('active');
+  currentStep=n;
+  if(n<=TOTAL_STEPS){
+    const panel=document.getElementById('step'+n);
+    panel.classList.add('active');
+    updateProgress(n);
+    updateStepList(n);
+    if(n===5)buildReview();
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(n){
+  document.getElementById('progressFill').style.width=(n/TOTAL_STEPS*100)+'%';
+}
+
+function updateStepList(n){
+  document.querySelectorAll('.ct-step-item').forEach(item=>{
+    const s=parseInt(item.dataset.step);
+    const num=item.querySelector('.ct-step-num');
+    item.classList.remove('active','inactive','done');
+    if(s<n){item.classList.add('done');num.textContent='✓';}
+    else if(s===n){item.classList.add('active');num.textContent=String(s).padStart(2,'0');}
+    else{item.classList.add('inactive');num.textContent=String(s).padStart(2,'0');}
+  });
+}
+
+/* ═══ RADIO & CHECKBOX HELPERS ═══ */
+function selectRadio(el,name,val){
+  /* Deselect all cards in group and uncheck their inputs */
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
+    r.checked=false;
+    r.closest('.radio-card')?.classList.remove('selected');
+  });
+  /* Select clicked card and check its radio input */
+  el.classList.add('selected');
+  const input=el.querySelector(`input[type=radio]`);
+  if(input)input.checked=true;
+}
+function toggleService(e,el){
+  e.preventDefault();
+  el.classList.toggle('selected');
+  el.querySelector('input[type=checkbox]').checked=el.classList.contains('selected');
+}
+
+/* ═══ READ FORM VALUES ═══ */
+function getServices(){
+  return [...document.querySelectorAll('#serviceCards .srv-check-card.selected')]
+    .map(c=>c.querySelector('input').value);
+}
+/* Returns the raw checked value for a radio group */
+function getRadio(name){
+  const el=document.querySelector(`input[name="${name}"]:checked`);
+  return el?el.value:'—';
+}
+/* Returns the human-readable card title for a radio group */
+function getSelCardTitle(name){
+  const card=document.querySelector(`input[name="${name}"]:checked`)?.closest('.radio-card');
+  return card?.querySelector('.radio-card-title')?.textContent?.trim()||'—';
+}
+
+/* ═══ BUILD REVIEW ═══ */
+function buildReview(){
+  const services=getServices();
+  document.getElementById('reviewContent').innerHTML=`
+    <div class="review-section">
+      <div class="review-section-title">Identity</div>
+      <div class="review-item"><span class="review-key">Name</span><span class="review-val">${v('firstName')} ${v('lastName')}</span></div>
+      <div class="review-item"><span class="review-key">Email</span><span class="review-val">${v('email')||'—'}</span></div>
+      <div class="review-item"><span class="review-key">Phone</span><span class="review-val">${v('phone')||'—'}</span></div>
+      <div class="review-item"><span class="review-key">Company</span><span class="review-val">${v('company')||'—'}</span></div>
+      ${v('website')?`<div class="review-item"><span class="review-key">Website</span><span class="review-val">${v('website')}</span></div>`:''}
+    </div>
+    <div class="review-section">
+      <div class="review-section-title">Business Context</div>
+      <div class="review-item"><span class="review-key">Industry</span><span class="review-val">${v('industry')||'—'}</span></div>
+      <div class="review-item"><span class="review-key">Stage</span><span class="review-val">${getSelCardTitle('stage')}</span></div>
+      <div class="review-item"><span class="review-key">Monthly Revenue</span><span class="review-val">${getSelCardTitle('revenue')}</span></div>
+    </div>
+    <div class="review-section">
+      <div class="review-section-title">Services Requested</div>
+      <div class="review-item" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${services.length?services.map(s=>`<span class="review-tag">${s}</span>`).join(''):'<span style="color:var(--g400);font-size:13px">None selected</span>'}
+        </div>
+      </div>
+    </div>
+    <div class="review-section">
+      <div class="review-section-title">Project Scope</div>
+      <div class="review-item"><span class="review-key">Budget</span><span class="review-val">${getSelCardTitle('budget')}</span></div>
+      <div class="review-item"><span class="review-key">Timeline</span><span class="review-val">${getSelCardTitle('timeline')}</span></div>
+      ${v('description')?`<div class="review-item"><span class="review-key">Brief</span><span class="review-val" style="font-size:13px;color:var(--g200);white-space:pre-wrap">${v('description')}</span></div>`:''}
+      ${v('source')?`<div class="review-item"><span class="review-key">Source</span><span class="review-val">${v('source')}</span></div>`:''}
+    </div>`;
+}
+
+function v(id){return document.getElementById(id)?.value?.trim()||'';}
+
+/* ═══ SUBMIT ═══ */
+function submitForm(){
+  /* In production: POST to backend/FormSpree. Here we show the success screen. */
+  document.getElementById('step5').classList.remove('active');
+  document.getElementById('stepSuccess').classList.add('active');
+  document.getElementById('progressFill').style.width='100%';
+  document.querySelectorAll('.ct-step-item').forEach(item=>{
+    item.classList.remove('active','inactive');
+    item.classList.add('done');
+    item.querySelector('.ct-step-num').textContent='✓';
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ═══ PREFILL INDUSTRY FROM URL PARAM ═══ */
+(function prefill(){
+  const params=new URLSearchParams(window.location.search);
+  const ind=params.get('industry');
+  if(ind){
+    const sel=document.getElementById('industry');
+    for(const opt of sel.options){
+      if(opt.value===ind||opt.value.startsWith(ind)){sel.value=opt.value;break;}
+    }
+  }
+})();
+</script>
+</body>
+</html>
