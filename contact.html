@@ -161,14 +161,34 @@ input,textarea,select{font-family:var(--font-b)}
 
 /* MOBILE */
 @media(max-width:900px){
+  #cDot,#cRing{display:none}body{cursor:auto}
   .ct-wrap{grid-template-columns:1fr}
   .ct-left{display:none}
-  .ct-form-area{padding:40px 24px}
+  .ct-mob-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--g900);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .ct-form-area{padding:40px 20px}
+  .form-grid-2{grid-template-columns:1fr}
+  .radio-cards-2,.radio-cards-3{grid-template-columns:1fr}
+  .srv-check-grid{grid-template-columns:1fr}
+  .ct-step-h{font-size:32px}
+  .ct-nav{flex-direction:column-reverse;gap:12px}
+  .ct-btn-next,.ct-btn-back{width:100%;justify-content:center}
+  .review-item{flex-direction:column;gap:4px}
+  .review-val{text-align:left}
 }
+.ct-mob-nav{display:none}
+.ct-mob-steps{font-family:var(--font-m);font-size:10px;letter-spacing:.15em;color:var(--blue);text-transform:uppercase}
 </style>
 </head>
 <body>
 <div id="cDot"></div><div id="cRing"></div>
+
+<div class="ct-mob-nav">
+  <a href="index.html" class="ct-logo">
+    <div class="ct-logo-box" style="width:28px;height:28px;font-size:11px">TCM</div>
+    <div class="ct-logo-name" style="font-size:16px">THE CODE <span>MORPH</span></div>
+  </a>
+  <div class="ct-mob-steps" id="mobStepCount">Step 01/05</div>
+</div>
 
 <div class="ct-wrap">
 
@@ -560,6 +580,7 @@ function goStep(n){
     panel.classList.add('active');
     updateProgress(n);
     updateStepList(n);
+    document.getElementById('mobStepCount').textContent = `Step ${String(n).padStart(2,'0')}/${String(TOTAL_STEPS).padStart(2,'0')}`;
     if(n===5)buildReview();
   }
   window.scrollTo({top:0,behavior:'smooth'});
