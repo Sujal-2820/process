@@ -8,6 +8,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+<style>
+/* Override intl-tel-input colors for dark theme */
+.iti { width: 100%; }
+.iti__country-list { background-color: var(--g800); border: 1px solid var(--border); color: var(--white); }
+.iti__country:hover { background-color: var(--g600); }
+.iti__selected-flag { background-color: var(--g900); border-right: 1px solid var(--border); }
+.iti__dial-code { color: var(--g400); }
+</style>
 <style>
 :root{
   --black:#000;--white:#fff;
@@ -179,19 +188,90 @@ input,textarea,select{font-family:var(--font-b)}
   .success-h{font-size:42px}
   .success-wrap{padding:40px 0}
 }
-.ct-mob-nav{display:none}
-.ct-mob-steps{font-family:var(--font-m);font-size:10px;letter-spacing:.15em;color:var(--blue);text-transform:uppercase}
+  .ct-mob-nav{display:none}
+  .ct-mob-steps{font-family:var(--font-m);font-size:10px;letter-spacing:.15em;color:var(--blue);text-transform:uppercase}
+
+  /* ════ NAV SYNC FROM INDEX ════ */
+  nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(0,0,0,.82);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:border-color .4s}
+  .nav-brand{display:flex;align-items:center;gap:14px;cursor:none}
+  .nav-icon{width:36px;height:36px;border:1.5px solid var(--blue);border-radius:6px;display:grid;place-items:center;position:relative;overflow:hidden;flex-shrink:0}
+  .nav-icon-inner{font-family:var(--font-d);font-size:16px;color:var(--blue);position:relative;z-index:1}
+  .nav-name{font-family:var(--font-d);font-size:24px;letter-spacing:.15em;line-height:1}
+  .nav-name span{color:var(--blue)}
+  .nav-links{display:flex;align-items:center;list-style:none}
+  .nav-links a{font-family:var(--font-m);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--g300);padding:10px 18px;transition:color .2s;position:relative;cursor:none;display:block}
+  .nav-right{display:flex;align-items:center;gap:10px}
+  .nav-mob-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:10px;z-index:1001}
+  .nav-mob-toggle span{width:22px;height:2px;background:var(--white);border-radius:2px;transition:0.3s}
+  
+  .m-menu{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center}
+  .m-menu.open{display:flex}
+  .m-menu-bg{position:absolute;inset:0;background:rgba(0,0,0,0.98);backdrop-filter:blur(15px);opacity:0;transition:opacity 0.4s}
+  .m-menu.open .m-menu-bg{opacity:1}
+  .m-menu-inner{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;padding:32px 24px;transform:translateY(20px);opacity:0;transition:all 0.4s 0.1s}
+  .m-menu.open .m-menu-inner{transform:translateY(0);opacity:1}
+  .m-menu-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:60px}
+  .m-menu-close{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--white);font-size:20px}
+  .m-menu-links{list-style:none;display:flex;flex-direction:column;gap:24px;margin-bottom:60px}
+  .m-menu-links a{font-family:var(--font-d);font-size:38px;text-transform:uppercase;letter-spacing:0.05em}
+  .m-menu-links a:hover{color:var(--blue)}
+  .m-menu-bottom{margin-top:auto}
+
+  @media(max-width:900px){
+    nav{padding:0 20px;height:60px}
+    .nav-links{display:none}
+    .nav-mob-toggle{display:flex}
+    .ct-wrap{padding-top:60px}
+    .m-menu-links a{font-size:30px!important}
+    .m-menu-links{gap:16px!important}
+  }
 </style>
 </head>
 <body>
 <div id="cDot"></div><div id="cRing"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 
-<div class="ct-mob-nav">
-  <a href="index.html" class="ct-logo">
-    <div class="ct-logo-box" style="width:28px;height:28px;font-size:11px">TCM</div>
-    <div class="ct-logo-name" style="font-size:16px">THE CODE <span>MORPH</span></div>
+<!-- ███ NAV ███ -->
+<nav id="mainNav">
+  <a href="index.html" class="nav-brand" data-cursor="HOME">
+    <div class="nav-icon"><span class="nav-icon-inner">TCM</span></div>
+    <div class="nav-name">THE CODE <span>MORPH</span></div>
   </a>
-  <div class="ct-mob-steps" id="mobStepCount">Step 01/05</div>
+  <ul class="nav-links">
+    <li><a href="index.html#services" data-cursor="SERVICES">Services</a></li>
+    <li><a href="index.html#process" data-cursor="PROCESS">Process</a></li>
+    <li><a href="index.html#why" data-cursor="WHY US">Why Us</a></li>
+    <li><a href="index.html#pricing" data-cursor="PRICING">Pricing</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="ct-mob-steps" style="display:flex;margin-right:20px" id="mobStepCount">Step 01/05</div>
+    <button class="nav-mob-toggle" id="navMobToggle" aria-label="Toggle Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="m-menu" id="mMenu">
+  <div class="m-menu-bg"></div>
+  <div class="m-menu-inner">
+    <div class="m-menu-top">
+      <div class="nav-brand">
+        <div class="nav-icon" style="width:32px;height:32px;font-size:12px"><span class="nav-icon-inner">TCM</span></div>
+        <div class="nav-name" style="font-size:20px">THE CODE <span>MORPH</span></div>
+      </div>
+      <button class="m-menu-close" id="mMenuClose">✕</button>
+    </div>
+    <ul class="m-menu-links">
+      <li><a href="index.html#hero" class="mm-link">Home</a></li>
+      <li><a href="index.html#services" class="mm-link">Services</a></li>
+      <li><a href="index.html#process" class="mm-link">Process</a></li>
+      <li><a href="index.html#pricing" class="mm-link">Pricing</a></li>
+    </ul>
+    <div class="m-menu-bottom">
+      <a href="contact.html" class="ct-btn-next" style="width:100%;justify-content:center">Start Transformation</a>
+    </div>
+  </div>
 </div>
 
 <div class="ct-wrap">
@@ -205,40 +285,25 @@ input,textarea,select{font-family:var(--font-b)}
       </a>
     </div>
 
-    <div class="ct-steps-wrap" id="stepList">
-      <div class="ct-step-item active" data-step="1">
-        <div class="ct-step-num">01</div>
-        <div>
-          <div class="ct-step-title">Identify</div>
-          <div class="ct-step-sub">Who are you?</div>
-        </div>
-      </div>
-      <div class="ct-step-item inactive" data-step="2">
-        <div class="ct-step-num">02</div>
-        <div>
-          <div class="ct-step-title">Context</div>
-          <div class="ct-step-sub">Your business</div>
-        </div>
-      </div>
-      <div class="ct-step-item inactive" data-step="3">
-        <div class="ct-step-num">03</div>
-        <div>
-          <div class="ct-step-title">Services</div>
-          <div class="ct-step-sub">What you need</div>
-        </div>
-      </div>
-      <div class="ct-step-item inactive" data-step="4">
-        <div class="ct-step-num">04</div>
-        <div>
-          <div class="ct-step-title">Scope</div>
-          <div class="ct-step-sub">Budget & timeline</div>
-        </div>
-      </div>
-      <div class="ct-step-item inactive" data-step="5">
-        <div class="ct-step-num">05</div>
-        <div>
-          <div class="ct-step-title">Confirm</div>
-          <div class="ct-step-sub">Review & submit</div>
+    <div class="ct-steps-wrap">
+      <div style="padding:40px 0">
+        <div style="font-family:var(--font-m);font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:var(--blue);margin-bottom:20px">// OUR PROMISE</div>
+        <div style="font-family:var(--font-d);font-size:32px;line-height:1;text-transform:uppercase;margin-bottom:24px">No Fluff.<br>Just Results.</div>
+        <p style="font-size:14px;color:var(--g300);line-height:1.7;margin-bottom:32px">We don't do "vendor-client" relationships. We do partnerships. We own your results as much as you do.</p>
+        
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;gap:12px">
+            <div style="color:var(--blue);font-size:14px">✓</div>
+            <div style="font-size:13px;color:var(--g200)">Blueprint delivered in 24hrs</div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <div style="color:var(--blue);font-size:14px">✓</div>
+            <div style="font-size:13px;color:var(--g200)">Fixed-price, no hidden fees</div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <div style="color:var(--blue);font-size:14px">✓</div>
+            <div style="font-size:13px;color:var(--g200)">Direct access to engineers</div>
+          </div>
         </div>
       </div>
     </div>
@@ -254,290 +319,77 @@ input,textarea,select{font-family:var(--font-b)}
 
   <!-- ═══ RIGHT PANEL ═══ -->
   <main class="ct-right">
-    <div class="ct-progress-bar"><div class="ct-progress-fill" id="progressFill"></div></div>
-
     <div class="ct-form-area">
+      <div class="ct-step-header">
+        <div class="ct-step-kicker">Quick Intake</div>
+        <div class="ct-step-h">Start Your<br>Transformation.</div>
+        <p class="ct-step-desc">Fill in the core details below. We'll review your project and get back to you with a custom blueprint within 24 hours.</p>
+      </div>
 
-      <!-- STEP 1: IDENTIFY -->
-      <div class="step-panel active" id="step1">
-        <div class="ct-step-header">
-          <div class="ct-step-kicker">Step 01 of 05</div>
-          <div class="ct-step-h">Let's start<br>with you.</div>
-          <p class="ct-step-desc">We build relationships, not transactions. Tell us who you are so we can speak your language from day one.</p>
-        </div>
-        <div class="form-grid">
-          <div class="form-grid form-grid-2">
+      <form id="projectForm" onsubmit="event.preventDefault(); showSuccess();">
+        <div class="form-grid" style="gap:32px">
+          
+          <!-- SECTION 1: IDENTITY -->
+          <div class="form-section">
+            <div class="form-label" style="margin-bottom:16px;color:var(--blue)">01. Identity</div>
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Full Name *</label>
+                <input class="form-input" type="text" id="fullName" placeholder="Arjun Sharma" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Business Email *</label>
+                <input class="form-input" type="email" id="email" placeholder="arjun@yourbrand.com" required>
+              </div>
+            </div>
+            <div class="form-grid form-grid-2" style="margin-top:16px">
+              <div class="form-group">
+                <label class="form-label">Company / Brand Name *</label>
+                <input class="form-input" type="text" id="company" placeholder="Your brand" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number *</label>
+                <input class="form-input" type="tel" id="phoneNumber" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: VERTICAL -->
+          <div class="form-section">
+            <div class="form-label" style="margin-bottom:16px;color:var(--blue)">02. Vertical</div>
             <div class="form-group">
-              <label class="form-label">First Name *</label>
-              <input class="form-input" type="text" id="firstName" placeholder="Arjun" required>
+              <label class="form-label">Industry / Industry Category *</label>
+              <select class="form-select" id="industry" required>
+                <option value="">Select your industry</option>
+                <option value="Healthcare">Healthcare & MedTech</option>
+                <option value="SaaS & Tech">SaaS & Technology</option>
+                <option value="FinTech">FinTech & Finance</option>
+                <option value="Real Estate">Real Estate & Property</option>
+                <option value="E-commerce">E-commerce & Retail</option>
+                <option value="LegalTech">Legal & LegalTech</option>
+                <option value="EdTech">Education & EdTech</option>
+                <option value="Other">Other Category</option>
+              </select>
             </div>
+          </div>
+
+          <!-- SECTION 3: THE VISION -->
+          <div class="form-section">
+            <div class="form-label" style="margin-bottom:16px;color:var(--blue)">03. The Vision</div>
             <div class="form-group">
-              <label class="form-label">Last Name *</label>
-              <input class="form-input" type="text" id="lastName" placeholder="Sharma">
+              <label class="form-label">What problem are we solving? *</label>
+              <textarea class="form-textarea" id="description" placeholder="Briefly describe what you want to build and what success looks like for you." required></textarea>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Business Email *</label>
-            <input class="form-input" type="email" id="email" placeholder="arjun@yourbrand.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phone Number *</label>
-            <input class="form-input" type="tel" id="phone" placeholder="+91 98765 43210" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Company / Brand Name *</label>
-            <input class="form-input" type="text" id="company" placeholder="Your company name" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Existing Website (if any)</label>
-            <input class="form-input" type="url" id="website" placeholder="https://yourbrand.com">
-          </div>
-        </div>
-        <div class="ct-nav">
-          <div></div>
-          <button class="ct-btn-next" onclick="goStep(2)">Next — Context →</button>
-        </div>
-      </div><!-- /step1 -->
 
-      <!-- STEP 2: CONTEXT -->
-      <div class="step-panel" id="step2">
-        <div class="ct-step-header">
-          <div class="ct-step-kicker">Step 02 of 05</div>
-          <div class="ct-step-h">Your business<br>context.</div>
-          <p class="ct-step-desc">Strategy without context is noise. Help us understand where you are so we can map exactly where you need to go.</p>
+          <button type="submit" class="ct-btn-next" style="width:100%;margin-top:20px;justify-content:center">
+            Submit Project Blueprint Request →
+          </button>
         </div>
-        <div class="form-grid" style="gap:24px">
-          <div class="form-group">
-            <label class="form-label">Industry / Vertical *</label>
-            <select class="form-select" id="industry">
-              <option value="">Select your industry</option>
-              <option value="Healthcare">Healthcare & MedTech</option>
-              <option value="SaaS & Tech">SaaS & Technology</option>
-              <option value="FinTech">FinTech & Finance</option>
-              <option value="Real Estate">Real Estate & Property</option>
-              <option value="E-commerce">E-commerce & Retail</option>
-              <option value="LegalTech">Legal & LegalTech</option>
-              <option value="EdTech">Education & EdTech</option>
-              <option value="F&B & Retail">Food & Beverage / Hospitality</option>
-              <option value="Manufacturing">Manufacturing & B2B</option>
-              <option value="Professional Services">Professional Services</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Business Stage *</label>
-            <div class="radio-cards radio-cards-2" id="stageCards">
-              <label class="radio-card" onclick="selectRadio(this,'stage','idea')">
-                <input type="radio" name="stage" value="idea"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">💡 Idea Stage</div><div class="radio-card-sub">Pre-revenue, validating concept</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'stage','startup')">
-                <input type="radio" name="stage" value="startup"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">🚀 Startup</div><div class="radio-card-sub">Early revenue, building momentum</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'stage','growing')">
-                <input type="radio" name="stage" value="growing"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">📈 Growing</div><div class="radio-card-sub">Scaling, need better systems</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'stage','established')">
-                <input type="radio" name="stage" value="established"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">🏢 Established</div><div class="radio-card-sub">Profitable, optimising for dominance</div></div>
-              </label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Monthly Revenue Range</label>
-            <div class="radio-cards radio-cards-3" id="revenueCards">
-              <label class="radio-card" onclick="selectRadio(this,'revenue','pre')">
-                <input type="radio" name="revenue" value="pre"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">Pre-revenue</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'revenue','0-1L')">
-                <input type="radio" name="revenue" value="0-1L"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹0 – 1L /mo</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'revenue','1-5L')">
-                <input type="radio" name="revenue" value="1-5L"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹1L – 5L /mo</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'revenue','5-20L')">
-                <input type="radio" name="revenue" value="5-20L"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹5L – 20L /mo</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'revenue','20L+')">
-                <input type="radio" name="revenue" value="20L+"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹20L+ /mo</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'revenue','prefer-not')">
-                <input type="radio" name="revenue" value="prefer-not"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">Prefer not to say</div></div>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="ct-nav">
-          <button class="ct-btn-back" onclick="goStep(1)">← Back</button>
-          <button class="ct-btn-next" onclick="goStep(3)">Next — Services →</button>
-        </div>
-      </div><!-- /step2 -->
-
-      <!-- STEP 3: SERVICES -->
-      <div class="step-panel" id="step3">
-        <div class="ct-step-header">
-          <div class="ct-step-kicker">Step 03 of 05</div>
-          <div class="ct-step-h">What do you<br>actually need?</div>
-          <p class="ct-step-desc">Select every service that applies. Most clients realise they need more than they thought — because each service compounds the others.</p>
-        </div>
-        <div class="srv-check-grid" id="serviceCards">
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Web & App Development"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">🌐</div>
-            <div><div class="srv-check-label">Web & App Dev</div><div class="srv-check-sub">Websites, SaaS, ecommerce</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="SEO"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">🔍</div>
-            <div><div class="srv-check-label">Search Engine SEO</div><div class="srv-check-sub">Rank higher, get found faster</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Paid Ads"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">📣</div>
-            <div><div class="srv-check-label">Paid Advertising</div><div class="srv-check-sub">Google, Meta, LinkedIn ads</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Local SEO"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">📍</div>
-            <div><div class="srv-check-label">Local SEO & Maps</div><div class="srv-check-sub">Google 3-Pack domination</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Website Maintenance"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">⚙️</div>
-            <div><div class="srv-check-label">Website Maintenance</div><div class="srv-check-sub">Uptime, speed, zero issues</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="AI Automation"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">🤖</div>
-            <div><div class="srv-check-label">AI & Automation</div><div class="srv-check-sub">Chatbots, CRM, workflows</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Branding"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">✨</div>
-            <div><div class="srv-check-label">Branding & Design</div><div class="srv-check-sub">Logo, identity, creatives</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Analytics"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">📊</div>
-            <div><div class="srv-check-label">Analytics & Reporting</div><div class="srv-check-sub">Data-driven decisions</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Security"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">🛡️</div>
-            <div><div class="srv-check-label">Website Security</div><div class="srv-check-sub">WAF, SSL, DDoS protection</div></div>
-          </label>
-          <label class="srv-check-card" onclick="toggleService(event,this)">
-            <input type="checkbox" name="services" value="Digital Transformation Consulting"><div class="srv-check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="srv-check-ico">🚀</div>
-            <div><div class="srv-check-label">DX Consulting</div><div class="srv-check-sub">Full digital transformation</div></div>
-          </label>
-        </div>
-        <div class="ct-nav">
-          <button class="ct-btn-back" onclick="goStep(2)">← Back</button>
-          <button class="ct-btn-next" onclick="goStep(4)">Next — Scope →</button>
-        </div>
-      </div><!-- /step3 -->
-
-      <!-- STEP 4: SCOPE -->
-      <div class="step-panel" id="step4">
-        <div class="ct-step-header">
-          <div class="ct-step-kicker">Step 04 of 05</div>
-          <div class="ct-step-h">Define the<br>scope.</div>
-          <p class="ct-step-desc">Investment and timing shape what's possible. Be honest — we'll always design the highest-ROI path within your constraints.</p>
-        </div>
-        <div class="form-grid" style="gap:24px">
-          <div class="form-group">
-            <label class="form-label">Investment Budget *</label>
-            <div class="radio-cards radio-cards-2" id="budgetCards">
-              <label class="radio-card" onclick="selectRadio(this,'budget','20-50k')">
-                <input type="radio" name="budget" value="20-50k"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹20K – 50K</div><div class="radio-card-sub">Starter — launch presence</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'budget','50k-1L')">
-                <input type="radio" name="budget" value="50k-1L"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹50K – 1L</div><div class="radio-card-sub">Growth — full platform</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'budget','1-5L')">
-                <input type="radio" name="budget" value="1-5L"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹1L – 5L</div><div class="radio-card-sub">Scale — serious infrastructure</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'budget','5L+')">
-                <input type="radio" name="budget" value="5L+"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">₹5L +</div><div class="radio-card-sub">Enterprise — total domination</div></div>
-              </label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Preferred Timeline *</label>
-            <div class="radio-cards radio-cards-2" id="timelineCards">
-              <label class="radio-card" onclick="selectRadio(this,'timeline','asap')">
-                <input type="radio" name="timeline" value="asap"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">🔥 ASAP</div><div class="radio-card-sub">We start yesterday</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'timeline','1-3mo')">
-                <input type="radio" name="timeline" value="1-3mo"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">1 – 3 Months</div><div class="radio-card-sub">Focused sprint</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'timeline','3-6mo')">
-                <input type="radio" name="timeline" value="3-6mo"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">3 – 6 Months</div><div class="radio-card-sub">Steady build</div></div>
-              </label>
-              <label class="radio-card" onclick="selectRadio(this,'timeline','flexible')">
-                <input type="radio" name="timeline" value="flexible"><div class="radio-dot"></div>
-                <div class="radio-card-body"><div class="radio-card-title">Flexible</div><div class="radio-card-sub">Let's plan it together</div></div>
-              </label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Describe Your Project or Requirements</label>
-            <textarea class="form-textarea" id="description" placeholder="Tell us what you're building, what problem you're solving, and what success looks like for you. The more context, the sharper our blueprint."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">How did you hear about us?</label>
-            <select class="form-select" id="source">
-              <option value="">Select one</option>
-              <option value="Google Search">Google Search</option>
-              <option value="Social Media">Social Media (Instagram / LinkedIn)</option>
-              <option value="Referral">Referral from someone</option>
-              <option value="WhatsApp">WhatsApp</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="ct-nav">
-          <button class="ct-btn-back" onclick="goStep(3)">← Back</button>
-          <button class="ct-btn-next" onclick="goStep(5)">Review & Confirm →</button>
-        </div>
-      </div><!-- /step4 -->
-
-      <!-- STEP 5: REVIEW -->
-      <div class="step-panel" id="step5">
-        <div class="ct-step-header">
-          <div class="ct-step-kicker">Step 05 of 05</div>
-          <div class="ct-step-h">Review &<br>confirm.</div>
-          <p class="ct-step-desc">Here's everything you've told us. Review it, add any final notes, and submit — we'll take it from here.</p>
-        </div>
-        <div id="reviewContent"></div>
-        <div class="form-group" style="margin-top:20px">
-          <label class="form-label">Anything else we should know?</label>
-          <textarea class="form-textarea" id="finalNotes" placeholder="Any special requirements, concerns, or questions for our strategy call..."></textarea>
-        </div>
-        <div class="ct-nav">
-          <button class="ct-btn-back" onclick="goStep(4)">← Back</button>
-          <button class="ct-btn-next" onclick="submitForm()" style="background:var(--green);box-shadow:none">Submit &amp; Book Call ✓</button>
-        </div>
-      </div><!-- /step5 -->
+      </form>
 
       <!-- SUCCESS -->
-      <div class="step-panel" id="stepSuccess">
+      <div class="step-panel" id="successSection" style="display:none;">
         <div class="success-wrap">
           <span class="success-icon">🚀</span>
           <div class="success-h">You're <span>morphed</span><br>in.</div>
@@ -570,29 +422,6 @@ const dot=document.getElementById('cDot'),ring=document.getElementById('cRing');
 let rx=0,ry=0,mx=0,my=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
 (function lag(){requestAnimationFrame(lag);rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';})();
-
-/* ═══ STEP MACHINE ═══ */
-let currentStep=1;
-const TOTAL_STEPS=5;
-
-function goStep(n){
-  if(n<1||n>TOTAL_STEPS+1)return;
-  document.getElementById('step'+currentStep)?.classList.remove('active');
-  currentStep=n;
-  if(n<=TOTAL_STEPS){
-    const panel=document.getElementById('step'+n);
-    panel.classList.add('active');
-    updateProgress(n);
-    updateStepList(n);
-    document.getElementById('mobStepCount').textContent = `Step ${String(n).padStart(2,'0')}/${String(TOTAL_STEPS).padStart(2,'0')}`;
-    if(n===5)buildReview();
-  }
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function updateProgress(n){
-  document.getElementById('progressFill').style.width=(n/TOTAL_STEPS*100)+'%';
-}
 
 function updateStepList(n){
   document.querySelectorAll('.ct-step-item').forEach(item=>{
@@ -701,6 +530,15 @@ function submitForm(){
     }
   }
 })();
+
+  // Initialize Intl Tel Input
+  const phoneInputField = document.querySelector("#phoneNumber");
+  const phoneInput = window.intlTelInput(phoneInputField, {
+    initialCountry: "in",
+    preferredCountries: ["in", "us", "ae", "gb"],
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+  });
 </script>
 </body>
 </html>
+```

@@ -580,8 +580,8 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
   .m-menu.open .m-menu-inner{transform:translateY(0);opacity:1}
   .m-menu-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:60px}
   .m-menu-close{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--white);font-size:20px}
-  .m-menu-links{list-style:none;display:flex;flex-direction:column;gap:32px;margin-bottom:60px}
-  .m-menu-links a{font-family:var(--font-d);font-size:48px;text-transform:uppercase;letter-spacing:0.05em}
+  .m-menu-links{list-style:none;display:flex;flex-direction:column;gap:24px;margin-bottom:60px}
+  .m-menu-links a{font-family:var(--font-d);font-size:38px;text-transform:uppercase;letter-spacing:0.05em}
   .m-menu-links a:hover{color:var(--blue)}
   .m-menu-bottom{margin-top:auto}
 }
@@ -614,6 +614,12 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
   .tm-card{min-width:100%!important;width:100%!important;padding:24px!important}
   .tm-card:nth-child(n+5){display:none!important} /* Hide duplicates on mobile */
   .tm-quote{font-size:13.5px!important;line-height:1.6!important}
+  /* Pricing Section Optimization */
+  .pr-card:not(.feat){border:1px solid var(--border-b)!important;margin-bottom:12px}
+  /* Mobile Menu Smartphone Fixes */
+  .m-menu-links{gap:16px!important}
+  .m-menu-links a{font-size:30px!important}
+  .m-menu-top{margin-bottom:40px!important}
 }
 
 /* ═══ VERTICAL EXPLORE MODAL ═══ */
