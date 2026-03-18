@@ -10,14 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
 <style>
-/* Override intl-tel-input colors for dark theme */
-.iti { width: 100%; }
-.iti__country-list { background-color: var(--g800); border: 1px solid var(--border); color: var(--white); }
-.iti__country:hover { background-color: var(--g600); }
-.iti__selected-flag { background-color: var(--g900); border-right: 1px solid var(--border); }
-.iti__dial-code { color: var(--g400); }
-</style>
-<style>
 :root{
   --black:#000;--white:#fff;
   --blue:#3b82f6;--blue-d:#1d4ed8;--blue-g:#60a5fa;
@@ -29,14 +21,12 @@
   --font-b:'Plus Jakarta Sans',sans-serif;
   --font-m:'JetBrains Mono',monospace;
   --ease:cubic-bezier(.23,1,.32,1);
-  --ease-b:cubic-bezier(.34,1.56,.64,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{background:var(--black);color:var(--white);font-family:var(--font-b);min-height:100vh;cursor:none}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--blue);color:#000}
-input,textarea,select{font-family:var(--font-b)}
 
 /* CURSOR */
 #cDot{position:fixed;width:8px;height:8px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .15s}
@@ -45,294 +35,161 @@ input,textarea,select{font-family:var(--font-b)}
 /* LAYOUT */
 .ct-wrap{display:grid;grid-template-columns:380px 1fr;min-height:100vh}
 
+/* NAV SYNC */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(0,0,0,.82);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-icon{width:36px;height:36px;border:1.5px solid var(--blue);border-radius:6px;display:grid;place-items:center;color:var(--blue);font-family:var(--font-d);font-size:16px}
+.nav-name{font-family:var(--font-d);font-size:24px;letter-spacing:.15em;line-height:1}
+.nav-name span{color:var(--blue)}
+.nav-links{display:flex;align-items:center;list-style:none;gap:8px}
+.nav-links a{font-family:var(--font-m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--g300);padding:10px 16px;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+
+.nav-mob-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:10px}
+.nav-mob-toggle span{width:22px;height:2px;background:var(--white);border-radius:2px}
+
 /* LEFT PANEL */
-.ct-left{background:var(--g900);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:0;overflow:hidden}
-.ct-left-top{padding:32px 40px;border-bottom:1px solid var(--border);flex-shrink:0}
-.ct-logo{display:flex;align-items:center;gap:12px;margin-bottom:0}
+.ct-left{background:var(--g900);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:32px 48px;overflow:hidden}
+.ct-logo{display:flex;align-items:center;gap:12px;margin-bottom:60px}
 .ct-logo-box{width:32px;height:32px;border:1.5px solid var(--blue);border-radius:5px;display:grid;place-items:center;font-family:var(--font-d);font-size:13px;color:var(--blue)}
 .ct-logo-name{font-family:var(--font-d);font-size:18px;letter-spacing:.15em}
-.ct-logo-name span{color:var(--blue)}
 
-.ct-steps-wrap{flex:1;padding:36px 40px;overflow-y:auto;display:flex;flex-direction:column;gap:0}
-.ct-step-item{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .3s;position:relative}
-.ct-step-item:last-child{border:none}
-.ct-step-item.inactive{opacity:.35}
-.ct-step-item.active{opacity:1}
-.ct-step-item.done{opacity:.7}
-.ct-step-num{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border-b);display:grid;place-items:center;font-family:var(--font-d);font-size:16px;color:var(--blue);flex-shrink:0;transition:all .35s}
-.ct-step-item.active .ct-step-num{background:var(--blue);color:#000;border-color:var(--blue)}
-.ct-step-item.done .ct-step-num{background:var(--green);border-color:var(--green);color:#000;font-size:12px}
-.ct-step-title{font-family:var(--font-d);font-size:16px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;line-height:1}
-.ct-step-sub{font-family:var(--font-m);font-size:10px;color:var(--g400);letter-spacing:.1em}
-.ct-step-item.active .ct-step-title{color:var(--white)}
-.ct-step-item.active .ct-step-sub{color:var(--g300)}
+.ct-promise-item{display:flex;gap:12px;margin-bottom:24px}
+.ct-promise-check{color:var(--blue);font-size:14px}
+.ct-promise-text{font-size:13px;color:var(--g200);line-height:1.6}
 
-.ct-left-bottom{padding:28px 40px;border-top:1px solid var(--border);flex-shrink:0}
+.ct-left-bottom{margin-top:auto;padding-top:32px;border-top:1px solid var(--border)}
 .ct-eta{display:flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:9px;letter-spacing:.15em;color:var(--g400);text-transform:uppercase;margin-bottom:14px}
 .ct-eta-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
-.ct-what-next{font-size:12px;color:var(--g400);line-height:1.7}
-.ct-what-next strong{color:var(--white);display:block;font-family:var(--font-m);font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
 
 /* RIGHT PANEL */
-.ct-right{display:flex;flex-direction:column;min-height:100vh}
-.ct-progress-bar{height:3px;background:var(--g800);position:relative;flex-shrink:0}
-.ct-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .6s var(--ease);width:20%}
-
-.ct-form-area{flex:1;padding:60px 72px;max-width:860px}
-.ct-step-header{margin-bottom:44px}
+.ct-right{padding:120px 72px 60px;max-width:960px}
+.ct-step-header{margin-bottom:48px}
 .ct-step-kicker{font-family:var(--font-m);font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .ct-step-kicker::before{content:'';width:22px;height:1px;background:var(--blue)}
-.ct-step-h{font-family:var(--font-d);font-size:clamp(36px,4vw,58px);text-transform:uppercase;letter-spacing:.02em;line-height:1;margin-bottom:10px}
+.ct-step-h{font-family:var(--font-d);font-size:clamp(36px,4vw,58px);text-transform:uppercase;line-height:1;margin-bottom:12px}
 .ct-step-desc{font-size:15px;color:var(--g300);line-height:1.8;max-width:520px}
 
-/* FORM ELEMENTS */
-.form-grid{display:grid;gap:16px}
-.form-grid-2{grid-template-columns:1fr 1fr}
+/* FORM */
+.form-grid{display:grid;gap:32px}
+.form-section-title{font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
 .form-group{display:flex;flex-direction:column;gap:8px}
 .form-label{font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--g300)}
-.form-input,.form-select,.form-textarea{background:var(--g900);border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-size:15px;color:var(--white);outline:none;transition:border-color .25s,box-shadow .25s;width:100%}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
-.form-input::placeholder,.form-textarea::placeholder{color:var(--g500)}
-.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
-.form-select option{background:var(--g800)}
-.form-textarea{min-height:120px;resize:vertical;line-height:1.7}
+.form-input,.form-select,.form-textarea{background:var(--g900);border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-size:15px;color:var(--white);outline:none;transition:border-color .25s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue)}
+.form-textarea{min-height:120px;resize:vertical}
 
-/* RADIO CARDS */
-.radio-cards{display:grid;gap:10px}
-.radio-cards-2{grid-template-columns:1fr 1fr}
-.radio-cards-3{grid-template-columns:repeat(3,1fr)}
-.radio-card{border:1px solid var(--border);border-radius:10px;padding:16px 18px;cursor:pointer;transition:all .25s;position:relative;display:flex;align-items:flex-start;gap:12px}
-.radio-card:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.02)}
-.radio-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06)}
-.radio-card input[type=radio]{display:none}
-.radio-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;transition:all .25s;display:grid;place-items:center}
-.radio-card.selected .radio-dot{border-color:var(--blue);background:var(--blue)}
-.radio-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:#000;opacity:0;transition:opacity .2s}
-.radio-card.selected .radio-dot::after{opacity:1}
-.radio-card-body{flex:1}
-.radio-card-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
-.radio-card-sub{font-size:12px;color:var(--g400);line-height:1.5}
-
-/* SERVICE CHECK CARDS */
-.srv-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.srv-check-card{border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
-.srv-check-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;transform:scaleY(0);transition:transform .3s;transform-origin:bottom}
-.srv-check-card:hover{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.02)}
-.srv-check-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06)}
-.srv-check-card.selected::before{background:var(--blue);transform:scaleY(1)}
-.srv-check-card input[type=checkbox]{display:none}
-.srv-check-box{width:20px;height:20px;border:1.5px solid var(--border);border-radius:5px;flex-shrink:0;display:grid;place-items:center;transition:all .25s}
-.srv-check-card.selected .srv-check-box{background:var(--blue);border-color:var(--blue)}
-.srv-check-box svg{opacity:0;transition:opacity .2s}
-.srv-check-card.selected .srv-check-box svg{opacity:1}
-.srv-check-ico{font-size:18px;flex-shrink:0}
-.srv-check-label{font-size:13px;font-weight:600;color:var(--white)}
-.srv-check-sub{font-size:11px;color:var(--g400);margin-top:1px}
-
-/* NAV BUTTONS */
-.ct-nav{display:flex;align-items:center;justify-content:space-between;margin-top:44px;padding-top:32px;border-top:1px solid var(--border)}
-.ct-btn-back{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:12px 24px;border:1px solid var(--border);border-radius:6px;color:var(--g300);cursor:pointer;background:none;transition:all .25s}
-.ct-btn-back:hover{border-color:rgba(255,255,255,.2);color:var(--white)}
-.ct-btn-next{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-d);font-size:18px;letter-spacing:.1em;text-transform:uppercase;padding:14px 40px;background:var(--blue);color:#000;border:none;border-radius:6px;cursor:pointer;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
-.ct-btn-next::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .5s}
-.ct-btn-next:hover::before{transform:translateX(100%)}
-.ct-btn-next:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(59,130,246,.45)}
-
-/* STEP PANELS */
-.step-panel{display:none;animation:stepIn .45s var(--ease) both}
-.step-panel.active{display:block}
-@keyframes stepIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* REVIEW PANEL */
-.review-section{margin-bottom:28px;padding:24px;background:var(--g900);border:1px solid var(--border);border-radius:12px}
-.review-section-title{font-family:var(--font-m);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--g400);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.review-section-title::before{content:'';width:14px;height:1px;background:var(--blue)}
-.review-item{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;gap:16px}
-.review-item:last-child{border:none;padding-bottom:0}
-.review-key{color:var(--g400);font-family:var(--font-m);font-size:11px;flex-shrink:0}
-.review-val{color:var(--white);text-align:right;line-height:1.5}
-.review-tag{display:inline-flex;padding:3px 10px;border:1px solid var(--border-b);border-radius:100px;font-size:11px;color:var(--blue);margin:2px;font-family:var(--font-m)}
+.ct-btn-submit{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-d);font-size:20px;letter-spacing:.1em;text-transform:uppercase;padding:18px 40px;background:var(--blue);color:#000;border:none;border-radius:8px;cursor:none;transition:transform .25s,box-shadow .25s;width:100%;margin-top:20px}
+.ct-btn-submit:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(59,130,246,.4)}
 
 /* SUCCESS */
-.success-wrap{text-align:center;padding:60px 40px;max-width:600px;margin:0 auto}
+#successSection{display:none;text-align:center;padding:60px 0}
 .success-icon{font-size:64px;margin-bottom:24px;display:block}
-.success-h{font-family:var(--font-d);font-size:clamp(40px,5vw,72px);text-transform:uppercase;letter-spacing:.02em;margin-bottom:16px}
-.success-h span{color:var(--blue)}
-.success-p{font-size:16px;color:var(--g300);line-height:1.85;margin-bottom:36px}
-.success-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:40px;text-align:left}
-.success-step{display:flex;gap:16px;align-items:flex-start;padding:16px 20px;background:var(--g900);border:1px solid var(--border);border-radius:10px}
-.success-step-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#000;display:grid;place-items:center;font-family:var(--font-d);font-size:14px;flex-shrink:0}
-.success-step-text{font-size:13px;color:var(--g200);line-height:1.65}
-.success-step-text strong{color:var(--white);display:block;margin-bottom:2px}
-.back-home{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--border-b);border-radius:6px;color:var(--blue);transition:background .25s}
-.back-home:hover{background:rgba(59,130,246,.08)}
+.success-h{font-family:var(--font-d);font-size:48px;text-transform:uppercase;margin-bottom:16px}
+.success-p{color:var(--g300);line-height:1.8;max-width:500px;margin:0 auto 32px}
 
-/* MOBILE */
+/* MOBILE MENU */
+.m-menu{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,0.98);backdrop-filter:blur(15px);padding:32px 24px}
+.m-menu.open{display:block}
+.m-menu-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:60px}
+.m-menu-links{list-style:none}
+.m-menu-links a{font-family:var(--font-d);font-size:38px;text-transform:uppercase;display:block;margin-bottom:24px}
+
+/* INTL TEL OVERRIDES */
+.iti { width: 100%; }
+.iti__country-list { background-color: var(--g800); border: 1px solid var(--border); color: var(--white); }
+.iti__country:hover { background-color: var(--g600); }
+.iti__selected-flag { background-color: var(--g900); border-right: 1px solid var(--border); }
+
 @media(max-width:900px){
-  #cDot,#cRing{display:none}body{cursor:auto}
   .ct-wrap{grid-template-columns:1fr}
   .ct-left{display:none}
-  .ct-mob-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(8,8,8,0.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:900}
-  .ct-form-area{padding:40px 16px}
-  .form-grid-2{grid-template-columns:1fr}
-  .radio-cards-2,.radio-cards-3{grid-template-columns:1fr}
-  .srv-check-grid{grid-template-columns:1fr}
-  .ct-step-h{font-size:32px;line-height:1.1}
-  .ct-nav{flex-direction:column-reverse;gap:12px;padding-top:24px;margin-top:24px}
-  .ct-btn-next,.ct-btn-back{width:100%;justify-content:center;padding:16px}
-  .review-item{flex-direction:column;gap:4px;padding:12px 0}
-  .review-val{text-align:left;font-size:15px}
-  .form-input,.form-select,.form-textarea{font-size:16px;min-height:48px}
-  .ct-step-header{margin-bottom:32px}
-  .success-h{font-size:42px}
-  .success-wrap{padding:40px 0}
-}
-  .ct-mob-nav{display:none}
-  .ct-mob-steps{font-family:var(--font-m);font-size:10px;letter-spacing:.15em;color:var(--blue);text-transform:uppercase}
-
-  /* ════ NAV SYNC FROM INDEX ════ */
-  nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(0,0,0,.82);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:border-color .4s}
-  .nav-brand{display:flex;align-items:center;gap:14px;cursor:none}
-  .nav-icon{width:36px;height:36px;border:1.5px solid var(--blue);border-radius:6px;display:grid;place-items:center;position:relative;overflow:hidden;flex-shrink:0}
-  .nav-icon-inner{font-family:var(--font-d);font-size:16px;color:var(--blue);position:relative;z-index:1}
-  .nav-name{font-family:var(--font-d);font-size:24px;letter-spacing:.15em;line-height:1}
-  .nav-name span{color:var(--blue)}
-  .nav-links{display:flex;align-items:center;list-style:none}
-  .nav-links a{font-family:var(--font-m);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--g300);padding:10px 18px;transition:color .2s;position:relative;cursor:none;display:block}
-  .nav-right{display:flex;align-items:center;gap:10px}
-  .nav-mob-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:10px;z-index:1001}
-  .nav-mob-toggle span{width:22px;height:2px;background:var(--white);border-radius:2px;transition:0.3s}
-  
-  .m-menu{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center}
-  .m-menu.open{display:flex}
-  .m-menu-bg{position:absolute;inset:0;background:rgba(0,0,0,0.98);backdrop-filter:blur(15px);opacity:0;transition:opacity 0.4s}
-  .m-menu.open .m-menu-bg{opacity:1}
-  .m-menu-inner{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;padding:32px 24px;transform:translateY(20px);opacity:0;transition:all 0.4s 0.1s}
-  .m-menu.open .m-menu-inner{transform:translateY(0);opacity:1}
-  .m-menu-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:60px}
-  .m-menu-close{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--white);font-size:20px}
-  .m-menu-links{list-style:none;display:flex;flex-direction:column;gap:24px;margin-bottom:60px}
-  .m-menu-links a{font-family:var(--font-d);font-size:38px;text-transform:uppercase;letter-spacing:0.05em}
-  .m-menu-links a:hover{color:var(--blue)}
-  .m-menu-bottom{margin-top:auto}
-
-  @media(max-width:900px){
-    nav{padding:0 20px;height:60px}
-    .nav-links{display:none}
-    .nav-mob-toggle{display:flex}
-    .ct-wrap{padding-top:60px}
-    .m-menu-links a{font-size:30px!important}
-    .m-menu-links{gap:16px!important}
+  .nav-links{display:none}
+  .nav-mob-toggle{display:flex}
+  .ct-right{padding:100px 20px 40px}
+  #projectForm div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
   }
+}
 </style>
 </head>
 <body>
 <div id="cDot"></div><div id="cRing"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 
-<!-- ███ NAV ███ -->
 <nav id="mainNav">
-  <a href="index.html" class="nav-brand" data-cursor="HOME">
-    <div class="nav-icon"><span class="nav-icon-inner">TCM</span></div>
+  <div class="nav-brand">
+    <div class="nav-icon">TCM</div>
     <div class="nav-name">THE CODE <span>MORPH</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html#services" data-cursor="SERVICES">Services</a></li>
-    <li><a href="index.html#process" data-cursor="PROCESS">Process</a></li>
-    <li><a href="index.html#why" data-cursor="WHY US">Why Us</a></li>
-    <li><a href="index.html#pricing" data-cursor="PRICING">Pricing</a></li>
-  </ul>
-  <div class="nav-right">
-    <div class="ct-mob-steps" style="display:flex;margin-right:20px" id="mobStepCount">Step 01/05</div>
-    <button class="nav-mob-toggle" id="navMobToggle" aria-label="Toggle Menu">
-      <span></span><span></span><span></span>
-    </button>
   </div>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#process">Process</a></li>
+    <li><a href="index.html#why">Why Us</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+  </ul>
+  <button class="nav-mob-toggle" id="navMobToggle">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- MOBILE MENU -->
 <div class="m-menu" id="mMenu">
-  <div class="m-menu-bg"></div>
-  <div class="m-menu-inner">
-    <div class="m-menu-top">
-      <div class="nav-brand">
-        <div class="nav-icon" style="width:32px;height:32px;font-size:12px"><span class="nav-icon-inner">TCM</span></div>
-        <div class="nav-name" style="font-size:20px">THE CODE <span>MORPH</span></div>
-      </div>
-      <button class="m-menu-close" id="mMenuClose">✕</button>
-    </div>
-    <ul class="m-menu-links">
-      <li><a href="index.html#hero" class="mm-link">Home</a></li>
-      <li><a href="index.html#services" class="mm-link">Services</a></li>
-      <li><a href="index.html#process" class="mm-link">Process</a></li>
-      <li><a href="index.html#pricing" class="mm-link">Pricing</a></li>
-    </ul>
-    <div class="m-menu-bottom">
-      <a href="contact.html" class="ct-btn-next" style="width:100%;justify-content:center">Start Transformation</a>
-    </div>
+  <div class="m-menu-top">
+    <div class="nav-brand"><div class="nav-icon">TCM</div></div>
+    <button id="mMenuClose" style="background:none;border:none;color:#fff;font-size:24px">✕</button>
   </div>
+  <ul class="m-menu-links">
+    <li><a href="index.html#hero" class="mm-link">Home</a></li>
+    <li><a href="index.html#services" class="mm-link">Services</a></li>
+    <li><a href="index.html#process" class="mm-link">Process</a></li>
+    <li><a href="index.html#pricing" class="mm-link">Pricing</a></li>
+  </ul>
 </div>
 
 <div class="ct-wrap">
-
-  <!-- ═══ LEFT PANEL ═══ -->
   <aside class="ct-left">
-    <div class="ct-left-top">
-      <a href="index.html" class="ct-logo">
-        <div class="ct-logo-box">TCM</div>
-        <div class="ct-logo-name">THE CODE <span>MORPH</span></div>
-      </a>
-    </div>
-
-    <div class="ct-steps-wrap">
-      <div style="padding:40px 0">
-        <div style="font-family:var(--font-m);font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:var(--blue);margin-bottom:20px">// OUR PROMISE</div>
-        <div style="font-family:var(--font-d);font-size:32px;line-height:1;text-transform:uppercase;margin-bottom:24px">No Fluff.<br>Just Results.</div>
-        <p style="font-size:14px;color:var(--g300);line-height:1.7;margin-bottom:32px">We don't do "vendor-client" relationships. We do partnerships. We own your results as much as you do.</p>
-        
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <div style="display:flex;gap:12px">
-            <div style="color:var(--blue);font-size:14px">✓</div>
-            <div style="font-size:13px;color:var(--g200)">Blueprint delivered in 24hrs</div>
-          </div>
-          <div style="display:flex;gap:12px">
-            <div style="color:var(--blue);font-size:14px">✓</div>
-            <div style="font-size:13px;color:var(--g200)">Fixed-price, no hidden fees</div>
-          </div>
-          <div style="display:flex;gap:12px">
-            <div style="color:var(--blue);font-size:14px">✓</div>
-            <div style="font-size:13px;color:var(--g200)">Direct access to engineers</div>
-          </div>
-        </div>
+    <a href="index.html" class="ct-logo">
+      <div class="ct-logo-box">TCM</div>
+      <div class="ct-logo-name">THE CODE <span>MORPH</span></div>
+    </a>
+    <div style="margin-top:40px">
+      <div style="font-family:var(--font-m);font-size:10px;color:var(--blue);margin-bottom:20px">// OUR PROMISE</div>
+      <div style="font-family:var(--font-d);font-size:32px;line-height:1;margin-bottom:24px">NO FLUFF.<br>JUST RESULTS.</div>
+      <div class="ct-promise-item">
+        <div class="ct-promise-check">✓</div>
+        <div class="ct-promise-text">Blueprint delivered in 24hrs</div>
+      </div>
+      <div class="ct-promise-item">
+        <div class="ct-promise-check">✓</div>
+        <div class="ct-promise-text">Fixed-price, no hidden fees</div>
+      </div>
+      <div class="ct-promise-item">
+        <div class="ct-promise-check">✓</div>
+        <div class="ct-promise-text">Direct access to engineers</div>
       </div>
     </div>
-
     <div class="ct-left-bottom">
       <div class="ct-eta"><div class="ct-eta-dot"></div>Takes ~4 minutes</div>
-      <div class="ct-what-next">
-        <strong>What happens next</strong>
-        We review your intake within 24hrs. You receive a free 90-min Strategy Call invite — where we dissect your goals, map your ICP, and deliver a custom project blueprint. No fluff. Just a plan.
+      <div style="font-size:12px;color:var(--g400);line-height:1.6">
+        <strong style="color:#fff;display:block;margin-bottom:6px">What happens next</strong>
+        We review your intake within 24hrs. You receive a free 90-min Strategy Call invite to map your digital infrastructure.
       </div>
     </div>
   </aside>
 
-  <!-- ═══ RIGHT PANEL ═══ -->
   <main class="ct-right">
-    <div class="ct-form-area">
+    <div id="formSection">
       <div class="ct-step-header">
         <div class="ct-step-kicker">Quick Intake</div>
-        <div class="ct-step-h">Start Your<br>Transformation.</div>
+        <h1 class="ct-step-h">Start Your<br>Transformation.</h1>
         <p class="ct-step-desc">Fill in the core details below. We'll review your project and get back to you with a custom blueprint within 24 hours.</p>
       </div>
 
-      <form id="projectForm" onsubmit="event.preventDefault(); showSuccess();">
-        <div class="form-grid" style="gap:32px">
-          
-          <!-- SECTION 1: IDENTITY -->
-          <div class="form-section">
-            <div class="form-label" style="margin-bottom:16px;color:var(--blue)">01. Identity</div>
-            <div class="form-grid form-grid-2">
+      <form id="projectForm">
+        <div class="form-grid">
+          <div>
+            <div class="form-section-title">01. Identity</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <div class="form-group">
                 <label class="form-label">Full Name *</label>
                 <input class="form-input" type="text" id="fullName" placeholder="Arjun Sharma" required>
@@ -342,7 +199,7 @@ input,textarea,select{font-family:var(--font-b)}
                 <input class="form-input" type="email" id="email" placeholder="arjun@yourbrand.com" required>
               </div>
             </div>
-            <div class="form-grid form-grid-2" style="margin-top:16px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
               <div class="form-group">
                 <label class="form-label">Company / Brand Name *</label>
                 <input class="form-input" type="text" id="company" placeholder="Your brand" required>
@@ -354,191 +211,71 @@ input,textarea,select{font-family:var(--font-b)}
             </div>
           </div>
 
-          <!-- SECTION 2: VERTICAL -->
-          <div class="form-section">
-            <div class="form-label" style="margin-bottom:16px;color:var(--blue)">02. Vertical</div>
+          <div>
+            <div class="form-section-title">02. Vertical</div>
             <div class="form-group">
-              <label class="form-label">Industry / Industry Category *</label>
+              <label class="form-label">Industry Category *</label>
               <select class="form-select" id="industry" required>
                 <option value="">Select your industry</option>
                 <option value="Healthcare">Healthcare & MedTech</option>
-                <option value="SaaS & Tech">SaaS & Technology</option>
+                <option value="SaaS">SaaS & Technology</option>
                 <option value="FinTech">FinTech & Finance</option>
-                <option value="Real Estate">Real Estate & Property</option>
                 <option value="E-commerce">E-commerce & Retail</option>
-                <option value="LegalTech">Legal & LegalTech</option>
-                <option value="EdTech">Education & EdTech</option>
-                <option value="Other">Other Category</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
 
-          <!-- SECTION 3: THE VISION -->
-          <div class="form-section">
-            <div class="form-label" style="margin-bottom:16px;color:var(--blue)">03. The Vision</div>
+          <div>
+            <div class="form-section-title">03. The Vision</div>
             <div class="form-group">
               <label class="form-label">What problem are we solving? *</label>
-              <textarea class="form-textarea" id="description" placeholder="Briefly describe what you want to build and what success looks like for you." required></textarea>
+              <textarea class="form-textarea" id="vision" placeholder="Describe your goals and desired outcomes." required></textarea>
             </div>
           </div>
 
-          <button type="submit" class="ct-btn-next" style="width:100%;margin-top:20px;justify-content:center">
-            Submit Project Blueprint Request →
-          </button>
+          <button type="submit" class="ct-btn-submit">Submit Blueprint Request →</button>
         </div>
       </form>
+    </div>
 
-      <!-- SUCCESS -->
-      <div class="step-panel" id="successSection" style="display:none;">
-        <div class="success-wrap">
-          <span class="success-icon">🚀</span>
-          <div class="success-h">You're <span>morphed</span><br>in.</div>
-          <p class="success-p">Your intake has been received. Our senior strategist is already reviewing your brief. Expect a personalised response within <strong>24 hours</strong>.</p>
-          <div class="success-steps">
-            <div class="success-step">
-              <div class="success-step-num">1</div>
-              <div class="success-step-text"><strong>Within 24 hours</strong>We review your brief and prepare a tailored pre-call analysis of your competitive landscape.</div>
-            </div>
-            <div class="success-step">
-              <div class="success-step-num">2</div>
-              <div class="success-step-text"><strong>Strategy Call Invite</strong>You receive a calendar link for your free 90-minute deep-dive session with our senior digital strategist.</div>
-            </div>
-            <div class="success-step">
-              <div class="success-step-num">3</div>
-              <div class="success-step-text"><strong>Custom Blueprint Delivered</strong>Post-call, you get a detailed project blueprint — scope, timeline, milestones, and investment — before a single rupee is committed.</div>
-            </div>
-          </div>
-          <a href="index.html" class="back-home">← Back to The Code Morph</a>
-        </div>
-      </div>
-
-    </div><!-- /ct-form-area -->
+    <div id="successSection">
+      <span class="success-icon">🚀</span>
+      <h2 class="success-h">You're Morphed In.</h2>
+      <p class="success-p">Your intake has been received. Our senior strategist is already reviewing your brief. Expect a response within 24 hours.</p>
+      <a href="index.html" class="ct-btn-next" style="display:inline-flex;padding:14px 32px">← Back to Home</a>
+    </div>
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 <script>
-/* ═══ CURSOR ═══ */
+/* CURSOR */
 const dot=document.getElementById('cDot'),ring=document.getElementById('cRing');
 let rx=0,ry=0,mx=0,my=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
 (function lag(){requestAnimationFrame(lag);rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';})();
 
-function updateStepList(n){
-  document.querySelectorAll('.ct-step-item').forEach(item=>{
-    const s=parseInt(item.dataset.step);
-    const num=item.querySelector('.ct-step-num');
-    item.classList.remove('active','inactive','done');
-    if(s<n){item.classList.add('done');num.textContent='✓';}
-    else if(s===n){item.classList.add('active');num.textContent=String(s).padStart(2,'0');}
-    else{item.classList.add('inactive');num.textContent=String(s).padStart(2,'0');}
-  });
-}
+/* MOBILE MENU */
+const toggle=document.getElementById('navMobToggle'),close=document.getElementById('mMenuClose'),menu=document.getElementById('mMenu');
+toggle.onclick=()=>{menu.classList.add('open');document.body.style.overflow='hidden';};
+close.onclick=()=>{menu.classList.remove('open');document.body.style.overflow='';};
+document.querySelectorAll('.mm-link').forEach(l=>l.onclick=()=>close.onclick());
 
-/* ═══ RADIO & CHECKBOX HELPERS ═══ */
-function selectRadio(el,name,val){
-  /* Deselect all cards in group and uncheck their inputs */
-  document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
-    r.checked=false;
-    r.closest('.radio-card')?.classList.remove('selected');
-  });
-  /* Select clicked card and check its radio input */
-  el.classList.add('selected');
-  const input=el.querySelector(`input[type=radio]`);
-  if(input)input.checked=true;
-}
-function toggleService(e,el){
+/* PHONE */
+const phoneInput = window.intlTelInput(document.querySelector("#phoneNumber"), {
+  initialCountry: "in",
+  preferredCountries: ["in", "us", "ae", "gb"],
+  utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+});
+
+/* SUBMIT */
+document.getElementById('projectForm').onsubmit=(e)=>{
   e.preventDefault();
-  el.classList.toggle('selected');
-  el.querySelector('input[type=checkbox]').checked=el.classList.contains('selected');
-}
-
-/* ═══ READ FORM VALUES ═══ */
-function getServices(){
-  return [...document.querySelectorAll('#serviceCards .srv-check-card.selected')]
-    .map(c=>c.querySelector('input').value);
-}
-/* Returns the raw checked value for a radio group */
-function getRadio(name){
-  const el=document.querySelector(`input[name="${name}"]:checked`);
-  return el?el.value:'—';
-}
-/* Returns the human-readable card title for a radio group */
-function getSelCardTitle(name){
-  const card=document.querySelector(`input[name="${name}"]:checked`)?.closest('.radio-card');
-  return card?.querySelector('.radio-card-title')?.textContent?.trim()||'—';
-}
-
-/* ═══ BUILD REVIEW ═══ */
-function buildReview(){
-  const services=getServices();
-  document.getElementById('reviewContent').innerHTML=`
-    <div class="review-section">
-      <div class="review-section-title">Identity</div>
-      <div class="review-item"><span class="review-key">Name</span><span class="review-val">${v('firstName')} ${v('lastName')}</span></div>
-      <div class="review-item"><span class="review-key">Email</span><span class="review-val">${v('email')||'—'}</span></div>
-      <div class="review-item"><span class="review-key">Phone</span><span class="review-val">${v('phone')||'—'}</span></div>
-      <div class="review-item"><span class="review-key">Company</span><span class="review-val">${v('company')||'—'}</span></div>
-      ${v('website')?`<div class="review-item"><span class="review-key">Website</span><span class="review-val">${v('website')}</span></div>`:''}
-    </div>
-    <div class="review-section">
-      <div class="review-section-title">Business Context</div>
-      <div class="review-item"><span class="review-key">Industry</span><span class="review-val">${v('industry')||'—'}</span></div>
-      <div class="review-item"><span class="review-key">Stage</span><span class="review-val">${getSelCardTitle('stage')}</span></div>
-      <div class="review-item"><span class="review-key">Monthly Revenue</span><span class="review-val">${getSelCardTitle('revenue')}</span></div>
-    </div>
-    <div class="review-section">
-      <div class="review-section-title">Services Requested</div>
-      <div class="review-item" style="flex-direction:column;align-items:flex-start;gap:8px">
-        <div style="display:flex;flex-wrap:wrap;gap:6px">
-          ${services.length?services.map(s=>`<span class="review-tag">${s}</span>`).join(''):'<span style="color:var(--g400);font-size:13px">None selected</span>'}
-        </div>
-      </div>
-    </div>
-    <div class="review-section">
-      <div class="review-section-title">Project Scope</div>
-      <div class="review-item"><span class="review-key">Budget</span><span class="review-val">${getSelCardTitle('budget')}</span></div>
-      <div class="review-item"><span class="review-key">Timeline</span><span class="review-val">${getSelCardTitle('timeline')}</span></div>
-      ${v('description')?`<div class="review-item"><span class="review-key">Brief</span><span class="review-val" style="font-size:13px;color:var(--g200);white-space:pre-wrap">${v('description')}</span></div>`:''}
-      ${v('source')?`<div class="review-item"><span class="review-key">Source</span><span class="review-val">${v('source')}</span></div>`:''}
-    </div>`;
-}
-
-function v(id){return document.getElementById(id)?.value?.trim()||'';}
-
-/* ═══ SUBMIT ═══ */
-function submitForm(){
-  /* In production: POST to backend/FormSpree. Here we show the success screen. */
-  document.getElementById('step5').classList.remove('active');
-  document.getElementById('stepSuccess').classList.add('active');
-  document.getElementById('progressFill').style.width='100%';
-  document.querySelectorAll('.ct-step-item').forEach(item=>{
-    item.classList.remove('active','inactive');
-    item.classList.add('done');
-    item.querySelector('.ct-step-num').textContent='✓';
-  });
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('successSection').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* ═══ PREFILL INDUSTRY FROM URL PARAM ═══ */
-(function prefill(){
-  const params=new URLSearchParams(window.location.search);
-  const ind=params.get('industry');
-  if(ind){
-    const sel=document.getElementById('industry');
-    for(const opt of sel.options){
-      if(opt.value===ind||opt.value.startsWith(ind)){sel.value=opt.value;break;}
-    }
-  }
-})();
-
-  // Initialize Intl Tel Input
-  const phoneInputField = document.querySelector("#phoneNumber");
-  const phoneInput = window.intlTelInput(phoneInputField, {
-    initialCountry: "in",
-    preferredCountries: ["in", "us", "ae", "gb"],
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
-  });
+};
 </script>
 </body>
 </html>
-```
