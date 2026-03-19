@@ -491,7 +491,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;ali
 .ct-btns{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:80px}
 .ct-btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:14px 26px;border:1px solid var(--border);border-radius:6px;cursor:none;transition:all .25s;color:var(--g300)}
 .ct-btn:hover{border-color:rgba(255,255,255,.22);color:var(--white);background:rgba(255,255,255,.04);transform:translateY(-2px)}
-.ct-price-block{border-top:1px solid var(--border);padding-top:64px}
+
 .ct-price-lbl{font-family:var(--font-m);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--g400);margin-bottom:14px}
 .ct-price-num{font-family:var(--font-d);font-size:clamp(52px,9vw,120px);line-height:.95;letter-spacing:-.02em}
 .ct-price-num .hl{color:var(--blue)}
@@ -686,7 +686,7 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
 .ct-btns{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:80px}
 .ct-btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:14px 26px;border:1px solid var(--border);border-radius:6px;cursor:none;transition:all .25s;color:var(--g300)}
 .ct-btn:hover{border-color:rgba(255,255,255,.22);color:var(--white);background:rgba(255,255,255,.04);transform:translateY(-2px)}
-.ct-price-block{border-top:1px solid var(--border);padding-top:64px}
+
 .ct-price-lbl{font-family:var(--font-m);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--g400);margin-bottom:14px}
 .ct-price-num{font-family:var(--font-d);font-size:clamp(52px,9vw,120px);line-height:.95;letter-spacing:-.02em}
 .ct-price-num .hl{color:var(--blue)}
@@ -814,8 +814,28 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
   }
 }
 
-/* ════ POPUP — STRATEGIC LEAD CAPTURE ════ */
-.lp-popup{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none;opacity:0;visibility:hidden;transition:all .6s var(--ease)}
+/* ════ PRICING HERO CARD ════ */
+.pr-hero-card{max-width:850px;margin:50px auto 0;background:var(--g900);border:1px solid var(--border);border-radius:24px;padding:60px 48px;position:relative;overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,.4)}
+.pr-hero-accent{position:absolute;top:0;left:0;right:0;height:4px;background:var(--blue)}
+.pr-hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center}
+.pr-hero-h3{font-family:var(--font-d);font-size:32px;margin-bottom:24px;text-transform:uppercase;color:var(--white)}
+.pr-hero-list{list-style:none;display:grid;gap:18px;color:var(--g300);font-size:15px}
+.pr-hero-list li{display:flex;align-items:center;gap:14px}
+.pr-hero-list span{color:var(--blue);font-weight:700}
+.pr-hero-right{text-align:center;padding:48px 40px;background:rgba(255,255,255,.02);border-radius:20px;border:1px solid var(--border);position:relative}
+.pr-hero-tag{font-family:var(--font-m);font-size:11px;color:var(--blue);letter-spacing:.25em;margin-bottom:12px;text-transform:uppercase}
+.pr-hero-price{font-family:var(--font-d);font-size:42px;line-height:1;margin-bottom:24px;color:var(--white)}
+.pr-hero-desc{font-size:14px;color:var(--g400);line-height:1.6;margin-bottom:32px}
+
+@media(max-width:768px){
+  .pr-hero-card{padding:40px 24px;margin:30px 10px 0;border-radius:18px}
+  .pr-hero-grid{grid-template-columns:1fr;gap:40px}
+  .pr-hero-h3{font-size:24px;text-align:center;margin-bottom:20px}
+  .pr-hero-list{font-size:13px;gap:14px}
+  .pr-hero-right{padding:32px 20px}
+  .pr-hero-price{font-size:32px}
+}
+
 .lp-popup.open{opacity:1;visibility:visible;pointer-events:all}
 .lp-overlay{position:absolute;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);opacity:0;transition:opacity .6s}
 .lp-popup.open .lp-overlay{opacity:1}
@@ -1725,64 +1745,33 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
   <div class="pr-inner">
     <div class="pr-head">
       <div class="s-tag" style="justify-content:center">Investment</div>
-      <h2 class="s-h2" style="text-align:center">Transparent Pricing.<br>Zero Surprises.</h2>
-      <p class="pr-sub">Every engagement starts with a free 90-minute strategy session. We work backwards from your goals to structure the right scope and investment.</p>
-      <div class="pr-toggle-wrap">
-        <span class="pr-toggle-lbl on" id="ptl1">Per Project</span>
-        <div class="pr-toggle" id="prToggle" data-cursor="TOGGLE"><div class="pr-toggle-dot"></div></div>
-        <span class="pr-toggle-lbl" id="ptl2">Monthly Retainer</span>
-        <div class="pr-save-badge">Save 30%</div>
+      <h2 class="s-h2" style="text-align:center">Result Driven Partnership</h2>
+      <p class="pr-sub">We don't do pre-made packages. We build exactly what your business needs to grow, starting with a 100% Free Strategy Session.</p>
+    </div>
+    
+    <div class="pr-hero-card">
+      <div class="pr-hero-accent"></div>
+      <div class="pr-hero-grid">
+        <div class="pr-hero-left">
+          <h3 class="pr-hero-h3">What we deliver:</h3>
+          <ul class="pr-hero-list">
+            <li><span>✔</span> Full-Stack Website & App Development</li>
+            <li><span>✔</span> Mobile-First Responsive Design</li>
+            <li><span>✔</span> Google My Business (GMB) Optimization</li>
+            <li><span>✔</span> Advanced SEO & Growth Strategy</li>
+            <li><span>✔</span> Bulletproof Security & SSL Certification</li>
+            <li><span>✔</span> Post-Launch Support & Maintenance</li>
+          </ul>
+        </div>
+        <div class="pr-hero-right">
+          <div class="pr-hero-tag">The Starting Point</div>
+          <div class="pr-hero-price">Free Strategy Session</div>
+          <p class="pr-hero-desc">90 minutes of expert consultation to map your digital roadmap. No commitment required.</p>
+          <a href="contact.html" class="pr-btn fil" style="width:100%;text-decoration:none">Book Free Session →</a>
+        </div>
       </div>
     </div>
-    <div class="pr-grid">
-      <div class="pr-card">
-        <div class="pr-tier">STARTER</div>
-        <div class="pr-name">Launch</div>
-        <div class="pr-price" id="pp1"><span class="cur">₹</span>20K<span class="per" id="pp1p">/ project</span></div>
-        <p class="pr-desc">Perfect for startups and SMBs launching their first serious digital presence.</p>
-        <ul class="pr-feats">
-          <li>Custom website or landing page</li>
-          <li>Mobile-responsive design</li>
-          <li>Basic SEO foundation</li>
-          <li>Google My Business setup</li>
-          <li>SSL & basic security</li>
-          <li>1-month post-launch support</li>
-        </ul>
-        <a href="contact.html" class="pr-btn out" data-cursor="START">Let's Talk →</a>
-      </div>
-      <div class="pr-card feat">
-        <div class="pr-tier">GROWTH</div>
-        <div class="pr-name">Scale</div>
-        <div class="pr-price" id="pp2"><span class="cur">₹</span>75K<span class="per" id="pp2p">/ project</span></div>
-        <p class="pr-desc">For businesses ready to build full-stack digital infrastructure that dominates their market.</p>
-        <ul class="pr-feats">
-          <li>Full web platform or SaaS MVP</li>
-          <li>Custom design system & UX</li>
-          <li>Backend API & database</li>
-          <li>WAF, SSL & security hardening</li>
-          <li>GMB + Google Maps + Apple Maps optimization</li>
-          <li>SEO + 3-month growth strategy</li>
-          <li>3-months priority support</li>
-        </ul>
-        <a href="contact.html" class="pr-btn fil" data-cursor="START">Most Popular →</a>
-      </div>
-      <div class="pr-card">
-        <div class="pr-tier">ENTERPRISE</div>
-        <div class="pr-name">Dominate</div>
-        <div class="pr-price" id="pp3" style="font-size:clamp(32px,4vw,48px)">Custom<span class="per" id="pp3p">/ retainer</span></div>
-        <p class="pr-desc">For companies that need a full-stack digital partner — not just a vendor they email.</p>
-        <ul class="pr-feats">
-          <li>Dedicated engineering team</li>
-          <li>Full BUILD + MANAGE + PROTECT + GROW</li>
-          <li>Complete local presence domination</li>
-          <li>Monthly strategy sessions</li>
-          <li>SLA-backed uptime guarantee</li>
-          <li>White-glove 24/7 priority support</li>
-        </ul>
-        <a href="contact.html" class="pr-btn out" data-cursor="START">Let's Talk →</a>
-      </div>
-    </div>
-    <p class="pr-note">All projects include a free 90-min strategy session · No lock-in contracts · Cancel anytime</p>
+    <p class="pr-note" style="margin-top:40px;text-align:center">Simple engagement · No hidden fees · Start at the most minimal cost.</p>
   </div>
 </section>
 
@@ -1805,12 +1794,7 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
       <a href="#pricing" class="ct-btn" data-cursor="PRICE">💰 View Pricing</a>
       <a href="contact.html" class="ct-btn" style="background:var(--blue);color:#000;border:none" data-cursor="START">🚀 Start Transformation</a>
     </div>
-    <div class="ct-price-block">
-      <div class="ct-price-lbl">Starting Investment</div>
-      <div class="ct-price-num"><span class="hl">₹20,000</span>+</div>
-      <div class="ct-price-sub">Monthly retainers available for Maintenance, Security, Local SEO & Growth services</div>
-      <a href="contact.html" class="ct-badge" data-cursor="START">🔄 Retainers Build Compounding Growth</a>
-    </div>
+
   </div>
 </section>
 
@@ -2247,29 +2231,7 @@ function initWhyCards(){
 /* ═══════════════════════════════
    PRICING TOGGLE
 ═══════════════════════════════ */
-function initPricingToggle(){
-  const tog=document.getElementById('prToggle'),l1=document.getElementById('ptl1'),l2=document.getElementById('ptl2');
-  const prices={
-    project:[['pp1','₹20K','/ project'],['pp2','₹75K','/ project'],['pp3','Custom','/ retainer']],
-    retainer:[['pp1','₹14K','/ month'],['pp2','₹52K','/ month'],['pp3','Custom','/ month']]
-  };
-  let isRetainer=false;
-  tog.addEventListener('click',()=>{
-    isRetainer=!isRetainer;tog.classList.toggle('on',isRetainer);
-    l1.classList.toggle('on',!isRetainer);l2.classList.toggle('on',isRetainer);
-    const set=isRetainer?prices.retainer:prices.project;
-    set.forEach(([id,val,per])=>{
-      const el=document.getElementById(id);
-      if(!el)return;
-      gsap.to(el,{opacity:0,y:-10,duration:.2,onComplete:()=>{
-        const cur=el.querySelector('.cur')?'<span class="cur">₹</span>':'';
-        const pp=el.querySelector('.per');
-        el.innerHTML=(id==='pp3'?'':`<span class="cur">₹</span>`)+val.replace('₹','')+`<span class="per">${per}</span>`;
-        gsap.fromTo(el,{opacity:0,y:10},{opacity:1,y:0,duration:.25});
-      }});
-    });
-  });
-}
+
 
 /* ═══════════════════════════════
    NAV SCROLL
@@ -2453,7 +2415,6 @@ function BOOT(){
   initHScroll();
   initProcess();
   initTech();
-  initPricingToggle();
   initNav();
   initClock();
   initRipples();
