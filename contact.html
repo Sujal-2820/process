@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Start Your Project — The Code Morph</title>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1646916829911925');
+fbq('track', 'PageView');
+fbq('track', 'Contact');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1646916829911925&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <meta name="description" content="Tell us about your business. We'll engineer the exact digital ecosystem it needs to dominate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -185,28 +204,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;ali
         <p class="ct-step-desc">Fill in the core details below. We'll review your project and get back to you with a custom blueprint within 24 hours.</p>
       </div>
 
-      <form id="projectForm">
+      <form id="projectForm" action="https://formsubmit.co/thecodemorphglobal@gmail.com" method="POST">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_subject" value="🚀 NEW PROJECT BLUEPRINT REQUEST!">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none">
         <div class="form-grid">
           <div>
             <div class="form-section-title">01. Identity</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <div class="form-group">
                 <label class="form-label">Full Name *</label>
-                <input class="form-input" type="text" id="fullName" placeholder="Arjun Sharma" required>
+                <input class="form-input" type="text" id="fullName" name="name" placeholder="Arjun Sharma" required>
               </div>
               <div class="form-group">
                 <label class="form-label">Business Email *</label>
-                <input class="form-input" type="email" id="email" placeholder="arjun@yourbrand.com" required>
+                <input class="form-input" type="email" id="email" name="email" placeholder="arjun@yourbrand.com" required>
               </div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
               <div class="form-group">
                 <label class="form-label">Company / Brand Name *</label>
-                <input class="form-input" type="text" id="company" placeholder="Your brand" required>
+                <input class="form-input" type="text" id="company" name="company" placeholder="Your brand" required>
               </div>
               <div class="form-group">
                 <label class="form-label">Phone Number *</label>
-                <input class="form-input" type="tel" id="phoneNumber" required>
+                <input class="form-input" type="tel" id="phoneNumber" name="phone" required>
               </div>
             </div>
           </div>
@@ -215,7 +238,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;ali
             <div class="form-section-title">02. Vertical</div>
             <div class="form-group">
               <label class="form-label">Industry Category *</label>
-              <select class="form-select" id="industry" required>
+              <select class="form-select" id="industry" name="industry" required>
                 <option value="">Select your industry</option>
                 <option value="Healthcare">Healthcare & MedTech</option>
                 <option value="SaaS">SaaS & Technology</option>
@@ -230,7 +253,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;ali
             <div class="form-section-title">03. The Vision</div>
             <div class="form-group">
               <label class="form-label">What problem are we solving? *</label>
-              <textarea class="form-textarea" id="vision" placeholder="Describe your goals and desired outcomes." required></textarea>
+              <textarea class="form-textarea" id="vision" name="message" placeholder="Describe your goals and desired outcomes." required></textarea>
             </div>
           </div>
 
@@ -270,11 +293,11 @@ const phoneInput = window.intlTelInput(document.querySelector("#phoneNumber"), {
 });
 
 /* SUBMIT */
-document.getElementById('projectForm').onsubmit=(e)=>{
-  e.preventDefault();
-  document.getElementById('formSection').style.display='none';
-  document.getElementById('successSection').style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
+document.getElementById('projectForm').onsubmit = function(e) {
+  // AJAX disabled for activation - standard POST redirect will occur
+  const btn = document.querySelector('.ct-btn-submit');
+  btn.textContent = 'ROUTING TO SECURE SERVER...';
+  // Allow form to proceed to FormSubmit for activation
 };
 </script>
 </body>

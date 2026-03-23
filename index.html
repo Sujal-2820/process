@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Code Morph — We Morph Your Digital Future</title>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1646916829911925');
+fbq('track', 'PageView');
+fbq('track', 'ViewContent');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1646916829911925&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -836,6 +855,7 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
   .pr-hero-price{font-size:32px}
 }
 
+.lp-popup{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;transition:all .5s}
 .lp-popup.open{opacity:1;visibility:visible;pointer-events:all}
 .lp-overlay{position:absolute;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);opacity:0;transition:opacity .6s}
 .lp-popup.open .lp-overlay{opacity:1}
@@ -1807,10 +1827,14 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
     <h2 class="lp-h2">Get Your<br>Project Blueprint.</h2>
     <p class="lp-p">Enter your details for a free 90-min strategy session to map your digital infrastructure. No strings attached.</p>
     
-    <form class="lp-form" onsubmit="event.preventDefault(); submitPopup();">
-      <input type="text" class="lp-input" placeholder="Full Name" required>
-      <input type="tel" class="lp-input" id="lpPhone" required>
-      <select class="lp-input" required>
+    <form class="lp-form" id="popupForm" action="https://formsubmit.co/thecodemorphglobal@gmail.com" method="POST">
+      <input type="hidden" name="_captcha" value="true">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_subject" value="New Lead from TCM Popup!">
+      <input type="text" name="_honey" style="display:none">
+      <input type="text" class="lp-input" id="lpName" name="name" placeholder="Full Name" required>
+      <input type="tel" class="lp-input" id="lpPhone" name="phone" required>
+      <select class="lp-input" id="lpGoal" name="goal" required>
         <option value="">Core Goal?</option>
         <option value="Web/App">Web or App Dev</option>
         <option value="SEO/Local">Local Domination</option>
@@ -2452,24 +2476,15 @@ function BOOT(){
       const srv = document.getElementById('services');
       if(!srv) return;
       const rect = srv.getBoundingClientRect();
-      // srv-wrap height is 600vh. Halfway is around -250vh to -300vh relative to section top
-      const threshold = window.innerWidth > 960 ? -window.innerHeight * 2.5 : -window.innerHeight * 0.5;
+      // srv-wrap height is 600vh. Halfway through the scroll is when rect.top is < -300vh
+      const threshold = window.innerWidth > 960 ? -window.innerHeight * 3 : -window.innerHeight * 0.5;
       if(rect.top < threshold) trigger();
     });
 
-    // Trigger B: Idle timer (20s)
-    let idleInterval = setInterval(() => {
-      idleTime += 1;
-      if(idleTime >= 20) {
-        trigger();
-        clearInterval(idleInterval);
-      }
-    }, 1000);
-
-    // Reset idle on interaction
-    ['mousemove','keydown','scroll','click','touchstart'].forEach(e => {
-      window.addEventListener(e, () => idleTime = 0);
-    });
+    // Trigger B: 15 Seconds Time-on-Page
+    setTimeout(() => {
+      if(!shown) trigger();
+    }, 15000);
 
     window.closePopup = () => {
       popup.classList.remove('open');
@@ -2477,18 +2492,25 @@ function BOOT(){
     };
 
     window.submitPopup = () => {
+      // AJAX disabled for activation - standard POST redirect will occur
       const btn = document.getElementById('lpBtn');
-      btn.textContent = 'ROUTING DATA...';
-      setTimeout(() => {
-        btn.textContent = 'DONE! CHECK EMAIL.';
-        btn.style.background = 'var(--green)';
-        setTimeout(closePopup, 1000);
-      }, 1500);
+      btn.textContent = 'CONNECTING...';
+      document.getElementById('popupForm').submit();
     };
   }
 
   // Start triggers after loader finishes
   setTimeout(initLeadCapture, 500);
+
+  // Meta Pixel: Track contact link clicks
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href') || '';
+    if (href.startsWith('mailto:') || href.startsWith('tel:') || href.includes('wa.me')) {
+      fbq('track', 'Contact');
+    }
+  });
 }
 
 // Ensure intl-tel-input CSS and JS are loaded for the popup
