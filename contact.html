@@ -204,8 +204,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;ali
         <p class="ct-step-desc">Fill in the core details below. We'll review your project and get back to you with a custom blueprint within 24 hours.</p>
       </div>
 
-      <form id="projectForm" action="https://formsubmit.co/thecodemorphglobal@gmail.com" method="POST">
+      <form id="projectForm" action="https://formsubmit.co/ajax/thecodemorphglobal@gmail.com" method="POST">
         <input type="hidden" name="_captcha" value="false">
+
         <input type="hidden" name="_subject" value="🚀 NEW PROJECT BLUEPRINT REQUEST!">
         <input type="hidden" name="_template" value="table">
         <input type="text" name="_honey" style="display:none">
@@ -309,19 +310,22 @@ document.getElementById('projectForm').onsubmit = function(e) {
     body: new FormData(form),
     headers: { 'Accept': 'application/json' }
   })
-  .then(res => res.json())
-  .then(data => {
-    if(data.success === "true" || data.status === "success") {
+  .then(async res => {
+    const isJson = res.headers.get('content-type')?.includes('application/json');
+    const data = isJson ? await res.json() : null;
+    
+    if (res.ok && data && (data.success === "true" || data.status === "success")) {
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('successSection').style.display = 'block';
       window.scrollTo({ top: document.getElementById('contact-area').offsetTop - 100, behavior: 'smooth' });
     } else {
-      throw new Error('Server rejected submission');
+      const errorMsg = data?.message || "Domain Activation Required. Please check your Gmail (thecodemorphglobal@gmail.com) for a confirmation email from FormSubmit and click the link.";
+      throw new Error(errorMsg);
     }
   })
   .catch(err => {
     console.error('Submission Error:', err);
-    alert('Submission failed. Please check your connection or try again.');
+    alert(err.message || 'Submission failed. Please try again.');
     btn.textContent = org;
     btn.style.opacity = '1';
     btn.disabled = false;

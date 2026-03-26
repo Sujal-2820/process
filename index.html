@@ -1827,8 +1827,9 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
     <h2 class="lp-h2">Get Your<br>Project Blueprint.</h2>
     <p class="lp-p">Enter your details for a free 90-min strategy session to map your digital infrastructure. No strings attached.</p>
     
-    <form class="lp-form" id="popupForm" action="https://formsubmit.co/thecodemorphglobal@gmail.com" method="POST">
+    <form class="lp-form" id="popupForm" action="https://formsubmit.co/ajax/thecodemorphglobal@gmail.com" method="POST">
       <input type="hidden" name="_captcha" value="false">
+
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_subject" value="New Lead from TCM Popup!">
 
@@ -2509,22 +2510,27 @@ function BOOT(){
         body: new FormData(form),
         headers: { 'Accept': 'application/json' }
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.success === "true" || data.status === "success") {
+      .then(async res => {
+        const isJson = res.headers.get('content-type')?.includes('application/json');
+        const data = isJson ? await res.json() : null;
+        
+        if (res.ok && data && (data.success === "true" || data.status === "success")) {
           form.style.display = 'none';
           document.querySelector('.lp-p').style.display = 'none';
           document.getElementById('popupSuccess').style.display = 'block';
         } else {
-          throw new Error('Server rejected lead');
+          // If not OK or not JSON, it likely needs domain activation
+          const errorMsg = data?.message || "Domain Activation Required. Please check your Gmail (thecodemorphglobal@gmail.com) for a confirmation email from FormSubmit and click the link.";
+          throw new Error(errorMsg);
         }
       })
       .catch(err => {
         console.error('Submission Error:', err);
-        alert('Submission failed. Please try again.');
+        alert(err.message || 'Submission failed. Please try again.');
         btn.textContent = org;
         btn.disabled = false;
       });
+
     };
 
     document.getElementById('popupForm').addEventListener('submit', window.submitPopup);
