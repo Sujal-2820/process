@@ -205,10 +205,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;display:flex;ali
       </div>
 
       <form id="projectForm" action="https://formsubmit.co/thecodemorphglobal@gmail.com" method="POST">
-        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_subject" value="🚀 NEW PROJECT BLUEPRINT REQUEST!">
         <input type="hidden" name="_template" value="table">
         <input type="text" name="_honey" style="display:none">
+
         <div class="form-grid">
           <div>
             <div class="form-section-title">01. Identity</div>
@@ -294,10 +295,37 @@ const phoneInput = window.intlTelInput(document.querySelector("#phoneNumber"), {
 
 /* SUBMIT */
 document.getElementById('projectForm').onsubmit = function(e) {
-  // AJAX disabled for activation - standard POST redirect will occur
-  const btn = document.querySelector('.ct-btn-submit');
-  btn.textContent = 'ROUTING TO SECURE SERVER...';
-  // Allow form to proceed to FormSubmit for activation
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('.ct-btn-submit');
+  const org = btn.textContent;
+  
+  btn.textContent = 'TRANSMITTING DATA...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success === "true" || data.status === "success") {
+      document.getElementById('formSection').style.display = 'none';
+      document.getElementById('successSection').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('contact-area').offsetTop - 100, behavior: 'smooth' });
+    } else {
+      throw new Error('Server rejected submission');
+    }
+  })
+  .catch(err => {
+    console.error('Submission Error:', err);
+    alert('Submission failed. Please check your connection or try again.');
+    btn.textContent = org;
+    btn.style.opacity = '1';
+    btn.disabled = false;
+  });
 };
 </script>
 </body>

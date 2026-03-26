@@ -1828,9 +1828,10 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
     <p class="lp-p">Enter your details for a free 90-min strategy session to map your digital infrastructure. No strings attached.</p>
     
     <form class="lp-form" id="popupForm" action="https://formsubmit.co/thecodemorphglobal@gmail.com" method="POST">
-      <input type="hidden" name="_captcha" value="true">
+      <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_subject" value="New Lead from TCM Popup!">
+
       <input type="text" name="_honey" style="display:none">
       <input type="text" class="lp-input" id="lpName" name="name" placeholder="Full Name" required>
       <input type="tel" class="lp-input" id="lpPhone" name="phone" required>
@@ -1844,9 +1845,12 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
       <button type="submit" class="lp-btn" id="lpBtn">Morph My Business →</button>
     </form>
     
-    <div style="margin-top:24px;display:flex;align-items:center;gap:12px">
-      <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:ldot 2s infinite"></div>
-      <div style="font-family:var(--font-m);font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--g400)">4 Slots Available This Month</div>
+    </div>
+    <div id="popupSuccess" style="display:none;padding:24px 0;text-align:center">
+      <div style="font-size:48px;margin-bottom:12px">🚀</div>
+      <h2 style="font-family:var(--font-d);font-size:24px;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Morphed!</h2>
+      <p style="font-size:14px;color:var(--g300);line-height:1.6">We've received your request. Expect a blueprint in your inbox within 24 hours.</p>
+      <button onclick="closePopup()" class="lp-btn" style="margin-top:20px;width:auto;padding:12px 24px">Close Window</button>
     </div>
   </div>
 </div>
@@ -2491,12 +2495,39 @@ function BOOT(){
       document.body.style.overflow = '';
     };
 
-    window.submitPopup = () => {
-      // AJAX disabled for activation - standard POST redirect will occur
+    window.submitPopup = (e) => {
+      if(e) e.preventDefault();
+      const form = document.getElementById('popupForm');
       const btn = document.getElementById('lpBtn');
-      btn.textContent = 'CONNECTING...';
-      document.getElementById('popupForm').submit();
+      const org = btn.textContent;
+      
+      btn.textContent = 'MAPPING...';
+      btn.disabled = true;
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success === "true" || data.status === "success") {
+          form.style.display = 'none';
+          document.querySelector('.lp-p').style.display = 'none';
+          document.getElementById('popupSuccess').style.display = 'block';
+        } else {
+          throw new Error('Server rejected lead');
+        }
+      })
+      .catch(err => {
+        console.error('Submission Error:', err);
+        alert('Submission failed. Please try again.');
+        btn.textContent = org;
+        btn.disabled = false;
+      });
     };
+
+    document.getElementById('popupForm').addEventListener('submit', window.submitPopup);
   }
 
   // Start triggers after loader finishes
