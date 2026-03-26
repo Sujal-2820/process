@@ -1836,7 +1836,14 @@ footer{background:var(--g900);border-top:1px solid var(--border);padding:80px 48
       <input type="text" name="_honey" style="display:none">
       <input type="text" class="lp-input" id="lpName" name="name" placeholder="Full Name" required>
       <input type="tel" class="lp-input" id="lpPhone" name="phone" required>
+      
+      <div id="lpMoreInfoBtn" onclick="toggleMoreInfo()" style="font-family:var(--font-m);font-size:9px;color:var(--blue);cursor:pointer;margin:8px 0 16px;text-transform:uppercase;letter-spacing:1px;display:inline-block">+ Provide more info (Optional)</div>
+      <div id="lpMoreInfoSection" style="display:none;margin-bottom:12px">
+        <textarea class="lp-input" name="project_description" placeholder="Describe your project vision / what you want to build..." style="min-height:90px;resize:none;padding:12px;font-size:13px;line-height:1.5"></textarea>
+      </div>
+
       <select class="lp-input" id="lpGoal" name="goal" required>
+
         <option value="">Core Goal?</option>
         <option value="Web/App">Web or App Dev</option>
         <option value="SEO/Local">Local Domination</option>
@@ -2495,6 +2502,19 @@ function BOOT(){
       popup.classList.remove('open');
       document.body.style.overflow = '';
     };
+
+    window.toggleMoreInfo = () => {
+      const sec = document.getElementById('lpMoreInfoSection');
+      const btn = document.getElementById('lpMoreInfoBtn');
+      if(sec.style.display === 'none') {
+        sec.style.display = 'block';
+        btn.textContent = '- Less info';
+      } else {
+        sec.style.display = 'none';
+        btn.textContent = '+ Provide more info (Optional)';
+      }
+    };
+
 
     window.submitPopup = (e) => {
       if(e) e.preventDefault();
