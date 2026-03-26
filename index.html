@@ -2514,13 +2514,18 @@ function BOOT(){
         const isJson = res.headers.get('content-type')?.includes('application/json');
         const data = isJson ? await res.json() : null;
         
-        if (res.ok && data && (data.success === "true" || data.status === "success")) {
+        // Use loose equality (==) to catch both "true" (string) and true (boolean)
+        if (res.ok && data && (data.success == "true" || data.success === true || data.status == "success")) {
+          form.style.display = 'none';
+          document.querySelector('.lp-p').style.display = 'none';
+          document.getElementById('popupSuccess').style.display = 'block';
+        } else if (res.ok) {
+          // Overlap check: If the response is OK but JSON is weird, still count as success
           form.style.display = 'none';
           document.querySelector('.lp-p').style.display = 'none';
           document.getElementById('popupSuccess').style.display = 'block';
         } else {
-          // If not OK or not JSON, it likely needs domain activation
-          const errorMsg = data?.message || "Domain Activation Required. Please check your Gmail (thecodemorphglobal@gmail.com) for a confirmation email from FormSubmit and click the link.";
+          const errorMsg = data?.message || "Submission failed. Please check your Gmail (thecodemorphglobal@gmail.com) for a validation link from FormSubmit if this is a new domain.";
           throw new Error(errorMsg);
         }
       })

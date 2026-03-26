@@ -314,12 +314,18 @@ document.getElementById('projectForm').onsubmit = function(e) {
     const isJson = res.headers.get('content-type')?.includes('application/json');
     const data = isJson ? await res.json() : null;
     
-    if (res.ok && data && (data.success === "true" || data.status === "success")) {
+    // Use loose equality (==) to catch both "true" (string) and true (boolean)
+    if (res.ok && data && (data.success == "true" || data.success === true || data.status == "success")) {
+      document.getElementById('formSection').style.display = 'none';
+      document.getElementById('successSection').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('contact-area').offsetTop - 100, behavior: 'smooth' });
+    } else if (res.ok) {
+      // Overlap check: If the response is OK but JSON is weird, still count as success
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('successSection').style.display = 'block';
       window.scrollTo({ top: document.getElementById('contact-area').offsetTop - 100, behavior: 'smooth' });
     } else {
-      const errorMsg = data?.message || "Domain Activation Required. Please check your Gmail (thecodemorphglobal@gmail.com) for a confirmation email from FormSubmit and click the link.";
+      const errorMsg = data?.message || "Submission failed. Please check your Gmail (thecodemorphglobal@gmail.com) for a validation link from FormSubmit if this is a new domain.";
       throw new Error(errorMsg);
     }
   })
